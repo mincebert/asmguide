@@ -13,6 +13,7 @@
 
 @{" Labels " LINK LABELS}
 @{" Expressions " LINK EXPRESSIONS}
+@{" Pseudo operations " LINK PSEUDOOPS}
 @{" Accessing NextBASIC integer variables " LINK VARS}
 @-------------------------------------------------------------------------------
 @node LABELS
@@ -194,7 +195,7 @@ optional "@{b}:@{ub}" after the anonymous labels.
 @-------------------------------------------------------------------------------
 @node EXPRESSIONS
 @prev LABELS
-@next VARS
+@next PSEUDOOPS
 @toc MAIN
 @{r}NextBASIC Inline Assembler Guide
 @{c}@{h1}Expressions
@@ -206,7 +207,7 @@ within parentheses are evaluated before all other operators.
 Available operators are given in the table below, from high to low precedence:
 
  Operator(s)    Description
- -----------    -----------------------------------------
+ -----------    --------------------------------------------
  @{b}(@{ub}...@{b})@{ub}          Parenthesised sub-expressions
  @{b}~@{ub},@{b}!@{ub},@{b}+@{ub},@{b}-@{ub}        Complement, logical NOT, unary plus/minus
  @{b}*@{ub},@{b}/@{ub},@{b}%@{ub}          Multiplication, division, modulo (remainder)
@@ -222,8 +223,43 @@ Available operators are given in the table below, from high to low precedence:
 
 See also: @{" Accessing NextBASIC integer variables " LINK VARS}
 @-------------------------------------------------------------------------------
-@node VARS
+@node PSEUDOOPS
 @prev EXPRESSIONS
+@next VARS
+@toc MAIN
+@{r}NextBASIC Inline Assembler Guide
+@{c}@{h1}Pseudo operations
+
+ Operation     Meaning
+ -----------   -----------
+ $             Current address / program counter
+ #
+ ALIGN n       Aligns next instruction to boundary n (n must be power of 2)
+ ASSERT exp    Raise error if exp evaluates to false.
+ BANK b[,o]    Assemble to bank 'b', optional offset 'o'
+ BRK           Insert CSpect BREAK instruction, triggering CSpect debugger
+ DB b[,...]    Define byte(s) 'b', or string of bytes
+ DC s[,...]    Define string(s) 's' with last character having high bit set
+ DS n          Define block of 'n' bytes, all set to 0
+ DW w[,...]    Define 16-bit word(s) 'w'
+ DZ s[,...]    Define string(s) 's' terminated by null (0)
+ DISPLAY
+ EQU
+ IF/ELSE/END
+ INCLUDE
+ LET           See: @{" NextBASIC variables " LINK VARS}
+ NBRK          Insert hardware breakpoint, triggering Next debugger
+ ORG
+ OUTPUT
+ RELOC_COUNT
+ RELOC_END
+ RELOC_START
+ RELOC_TABLE
+ SAVENEX
+ VAR
+@-------------------------------------------------------------------------------
+@node VARS
+@prev PSEUDOOPS
 @toc MAIN
 @{r}NextBASIC Inline Assembler Guide
 @{c}@{h1}Accessing NextBASIC integer variables
