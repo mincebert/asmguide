@@ -1,0 +1,430 @@
+@title NextBASIC Inline Assembler Guide
+@author Robert Franklin
+@copyright Copyright (C) 2026 taylora
+@version 0.8
+@date 2026/03/28
+@index INDEX
+@-------------------------------------------------------------------------------
+@node MAIN
+@next LABELS
+@toc MAIN
+@{r}NextBASIC Inline Assembler Guide
+@{c}@{h1}NextBASIC Inline Assembler Guide Contents
+
+@{" Labels " LINK LABELS}
+@{" Expressions " LINK EXPRESSIONS}
+@{" Accessing NextBASIC integer variables " LINK VARS}
+@-------------------------------------------------------------------------------
+@node LABELS
+@prev MAIN
+@next EXPRESSIONS
+@toc MAIN
+@{r}NextBASIC Inline Assembler Guide
+@{c}@{h1}Labels
+
+The assembler recognizes both global and local (or scoped) labels.  Global
+labels must be unique throughout the entire program, whereas local labels must
+be unique within their respective scope.
+
+The "@{b}_@{ub}" symbol can be utilized independently to establish anonymous labels.  For
+enhanced readability, you have the option to append a "@{b}:@{ub}" following any label
+definition.
+
+@{h2}Global Labels
+
+Labels serve as identifiers for memory addresses or constants within an assembly
+application.  To define a label, simply type a name at the beginning of the
+line, immediately followed by the "@{b};@{ub}" that starts the assembly code line.
+
+For instance, by defining a label named @{i}loop@{ui}, we can easily refer to it in an
+assembly instruction to create an infinite loop, like so:
+
+  10 .asm
+  20 ;loop
+  30 ;  jp loop
+
+The @{i}loop@{ui} label denotes the memory address where the corresponding code is
+assembled.  During assembly, any reference to loop is substituted with its
+actual memory address.
+
+In our example, @{i}loop@{ui} is a global label.  This designation means it must be
+unique; otherwise, the assembler will flag it with a "duplicate definition”
+error.  While this ensures label uniqueness, it can be cumbersome when you want
+to reuse a label name for similar code patterns.
+
+That’s where local or scoped labels come in handy.  Each global label initiates
+a new scope, allowing you to define local labels within it.  These local labels
+won’t conflict with others in different scopes.  However, within the same scope,
+you must still avoid duplicate local label names
+
+@{h2}Local Labels
+
+Local labels, similar to global labels, are used to identify memory addresses or
+constant values.  The distinction lies in the prefix of a local label, which is
+a "@{b}.@{ub}".  This differentiates it from a global label and confines its scope.
+
+Here’s how you might structure your code using only global labels:
+
+   10 .asm
+   20 ;print
+   30 ;  ld a, 2
+   40 ;  call openChan
+   50 ;printCh
+   60 ;  ld a, (hl)
+   70 ;  or a
+   80 ;  jr z, printDone
+   90 ;  call printCh
+  100 ;  inc hl
+  110 ;  jp print
+  120 ;printDone
+  130 ;  jp printNL
+  140 ;
+  150 ;send
+  160 ;  ld bc,9600
+  170 ;  call initUart
+  180 ;nextCh
+  190 ;  ld a, (hl)
+  200 ;  or a
+  210 ;  jr z, sendDone
+  220 ;  call sendCh
+  230 ;  inc hl
+  240 ;  jp nextCh
+  250 ;sendDone
+  260 ;  call sendNL
+  270 ;  jp closeUart
+  ...
+
+In this example, we encounter a common pattern at the end of string processing:
+exiting the print or send loop.  Originally, we had to use distinct labels,
+@{i}printDone@{ui} and @{i}sendDone@{ui}, to differentiate the exit points for each routine.
+Similarly, unique names were required for each character-processing address.
+The use of @{i}sendCh@{ui} was not possible due to the preexistence of a @{i}sendCh@{ui} global
+label.
+
+However, with local labels, the need for unique global names diminishes.
+Observe how the following example employs local labels to simplify the naming
+process
+
+   10 .asm
+   20 ;print
+   30 ;  ld a, 2
+   40 ;  call openChan
+   50 ;.ch
+   60 ;  ld a, (hl)
+   70 ;  or a
+   80 ;  jr z, .done
+   90 ;  call printCh
+  100 ;  inc hl
+  110 ;  jp print
+  120 ;.done
+  130 ;  jp printNL
+  140 ;
+  150 ;send
+  160 ;  ld bc,9600
+  170 ;  call initUart
+  180 ;.ch
+  190 ;  ld a, (hl)
+  200 ;  or a
+  210 ;  jr z, .done
+  220 ;  call sendCh
+  230 ;  inc hl
+  240 ;  jp .ch
+  250 ;.done
+  260 ;  call sendNL
+  260 ;  jp closeUart
+  ...
+
+In this setup, the @{i}.ch@{ui} and @{i}.done@{ui} labels are confined to their respective
+routines, allowing for their reuse across different routines without naming
+conflicts.  The @{i}print@{ui} label establishes a new scope, and any labels beginning
+with a "@{b}.@{ub}" are considered local to this scope.  Similarly, the @{i}send@{ui} label
+defines its own scope.
+
+@{h2}Label names
+
+Label names must meet the following requirements:
+
+  Max length:         15
+  Must start with:    "@{b}.@{ub}" or "@{b}_@{ub}" or @{b}a@{ub}..@{b}z@{ub}
+  Rest of the name:   "@{b}.@{ub}" or "@{b}_@{ub}" or @{b}a@{ub}..@{b}z@{ub} or @{b}0@{ub}..@{b}9@{b}
+
+When prefixed with a "@{b}.@{ub}", a label becomes scoped to the global label most
+recently declared before it.  The maximum length of a local label is contingent
+upon the length of its scope label’s name.  For instance, within the @{i}print@{ui}
+scope, the @{i}.ch@{ui} label effectively has a length of 8 characters, whereas in the
+@{i}send@{ui} scope, it has a length of 7 characters.
+
+@{h2}Referencing local labels across scopes
+
+If you need to reference a local label from a different scope, you can use its
+fully qualified name.  For instance, to jump to the @{i}.done@{ui} label within the print
+routine from an external scope, you could use the following method:
+
+  jp print.done
+
+@{h2}Anonymous Labels
+
+Anonymous labels are a powerful tool for creating jump targets in compact
+routines, eliminating the need for descriptive names.  They are especially
+beneficial in small routines with clear local loops or jumps.  It’s important to
+note that any instruction referencing an anonymous label will point to the
+nearest such label.
+
+Here’s how you can use them:
+
+  @{b}_@{ub}   is used to create a new anonymous label
+
+  @{b}-_@{ub}  points to the anonymous label immediately preceding the instruction
+
+  @{b}+_@{ub}  points to the anonymous label immediately following the instruction
+
+Let’s look at an example that illustrates the use of two anonymous labels and
+how you can selectively branch to either one.  For readability, we’ve placed an
+optional "@{b}:@{ub}" after the anonymous labels.
+
+  _:
+    ld a, (hl)
+    or a
+    jr z, +_     ; if register A is zero, jump forward to next anonymous label
+    rst $10
+    inc hl
+    jr -_        ; jump back to the preceding anonymous label
+  _:
+    ret
+@-------------------------------------------------------------------------------
+@node EXPRESSIONS
+@prev LABELS
+@next VARS
+@toc MAIN
+@{r}NextBASIC Inline Assembler Guide
+@{c}@{h1}Expressions
+
+The assembler follows the normal BODMAS/PEMDAS operator precedence rules.
+Operators at the same precedence are evaluated left to right, sub-expressions
+within parentheses are evaluated before all other operators.
+
+Available operators are given in the table below, from high to low precedence:
+
+ Operator(s)    Description
+ -----------    -----------------------------------------
+ @{b}(@{ub}...@{b})@{ub}          Parenthesised sub-expressions
+ @{b}~@{ub},@{b}!@{ub},@{b}+@{ub},@{b}-@{ub}        Complement, logical NOT, unary plus/minus
+ @{b}*@{ub},@{b}/@{ub},@{b}%@{ub}          Multiplication, division, modulo (remainder)
+ @{b}+@{ub},@{b}-@{ub}            Addition, subtraction
+ @{b}<<@{ub},@{b}>>@{ub}          Bitwise shift
+ @{b}<@{ub},@{b}<=@{ub},@{b}>@{ub},@{b}>=@{ub}      Relational operators
+ @{b}=@{ub},@{b}<>@{ub}           Equal, not equal
+ @{b}&@{ub}              Bitwise AND
+ @{b}^@{ub}              Bitwise XOR
+ @{b}|@{ub}              Bitwise OR
+ @{b}&&@{ub}             Logical AND
+ @{b}||@{ub}             Logical OR
+
+See also: @{" Accessing NextBASIC integer variables " LINK VARS}
+@-------------------------------------------------------------------------------
+@node VARS
+@prev EXPRESSIONS
+@toc MAIN
+@{r}NextBASIC Inline Assembler Guide
+@{c}@{h1}Accessing NextBASIC integer variables
+
+There are two challenges that this feature is aimed at addressing:
+
+  * Referencing data in your NextBASIC application at the time of assembly.
+  * Providing information about the assembled code back to NextBASIC.
+
+@{h2}Getting the value of a NextBASIC integer variable
+
+This example demonstrates how a memory bank allocated in NextBASIC can be
+referenced in the assembly code to direct the assembler to generate the machine
+code into the target bank.
+
+  10 BANK NEW %a
+  20 .asm
+  30 ;  BANK %a
+  40 ;  ld bc, 42
+  50 ;  ret
+  60 PRINT BANK %a USR 0
+
+Looking at this line by line:
+
+  @{b}10 BANK NEW %a@{ub}
+  Here we allocate the bank in BASIC and have the bank number stored in the
+  @{i}%a@{ui} integer variable.
+
+  @{b}20 .asm@{ub}
+  Invokes the Inline Assembler, which will assemble the assembly code.
+
+  @{b}30 ;  BANK %a@{ub}
+  This is the first line of assembly, this is a pseudo-op that directs the
+  assembler to generate the code to a specific bank.  In this case we are using
+  the bank number that was stored in the variable @{i}%a@{ui} in line 10 to provide that
+  information to the assembler.
+
+  @{b}40 ;  ld bc, 42@{ub}
+  @{b}50 ;  ret@{ub}
+  Lines 40 and 50 are our actual machine code, in this case we are just loading
+  the value 42 into the BC register and then returning to the caller.  In our
+  case the caller will be BASIC.  Once the assembler has completed the assembly
+  process, it will hand the reigns back to the BASIC interpreter to continue
+  where the assembler left off.
+
+  @{b}60 PRINT BANK %a USR 0@{ub}
+  Back in the BASIC interpreter, we want to execute the code that the assembler
+  generated for us.  Here we use the BASIC @{b}BANK USR@{ub} statement to execute
+  code in the target bank.  In this case the code resides at offset 0 within
+  the target memory bank.
+
+If everything went according to plan, running this code will assemble the
+routine into the target bank, then execute the routine and print the value 42 on
+the screen.  It is a feature of the @{b}USR@{ub} and @{b}BANK USR@{ub} statements that what ever
+value is left in the BC register will be returned to the caller.
+
+@{h2}Setting the value of a NextBASIC Integer Variable
+
+This example demonstrates how passing information about the assembled code back
+to the BASIC interpreter.  It is not always easy to know what at what address a
+particular piece of code in your assembly will land.  And even if you do add up
+the bytes manually any subsequent change to the code will potentially result in
+you needing to recalculate the addresses.
+
+In this first example, we will create two routines in assembly language and then
+pass the addresses of those routines back to BASIC so that we can execute them
+as needed.  I will keep the routines simple for illustration purposes.
+
+    5 CLEAR $bfff
+   10 %z=13
+   20 .asm
+   30 ;fn1
+   40 ;  ld bc, %z*2
+   50 ;  ret
+   60 ;fn2
+   70 ;  ld bc, 42
+   80 ;  ret
+   90 ;  LET %a=fn1
+  100 ;  LET %b=fn2
+  110 PRINT USR (%a)
+  120 PRINT USR (%b)
+
+Let's review the key pieces of code in this example:
+
+    @{b}5 CLEAR $bfe0@{ub}
+  We did not do this in the first example!  In this example we are going to
+  assemble our code into the same memory area that is usually used by BASIC.
+  The CLEAR statement tells BASIC interpreter what memory we will be using, in
+  this case the memory above $bfff starting at $c000.  Coincidentally, this is
+  also the default address the assembler uses unless told otherwise.  After
+  this, statement BASIC will ensure that it does not overwrite any memory in
+  this area.
+
+   @{b}10 %z=13@{ub}
+  This is standard NextBASIC syntax to assign the value 13 to integer variable
+  @{i}%a@{ui}.
+
+  Line 20 triggers the assembler as mentioned in the first example.
+
+   @{b}30 ;fn1@{ub}
+  This creates a label @{i}fn1@{ui}, the value of the label is the memory address that
+  the next instruction will be assembled to.  In assembly this is useful for
+  naming locations that you will jump to or call within the assembly code.
+
+   @{b}40 ;  ld bc, %z*2@{ub}
+  Similar to the first example we are loading a value in the BC register.
+  However, in this case we are getting that value from the @{i}%z@{ui} integer variable,
+  which we had set to 13 prior to the assembler being triggered.  As you can
+  see, these accesses can also be used in expressions, here was are doubling
+  the value before it is loaded into BC.
+
+   @{b}50 ;  ret@{ub}
+  As before, we return to the caller with the @{b}ret@{ub} instruction.
+
+   @{b}60 ;fn2@{ub}
+   @{b}70 ;  ld bc, 42@{ub}
+   @{b}80 ;  ret@{ub}
+  Lines 60-80 creates a second routine at address @{i}fn2@{ui}.  This is the same
+  routine we saw in our earlier example, it just load the value 42 into the BC
+  register and returns to the caller.
+
+   @{b}90 ;  LET %a=fn1@{ub}
+  @{b}100 ;  LET %b=fn2@{ub}
+  And finally, we get to the code that will pass information back to the BASIC
+  interpreter.  The @{b}LET@{ub} pseudo-op uses a syntax similar to that of BASIC, but
+  do not be confused, this is not BASIC.  The assembler will assign the
+  addresses stored in @{i}fn1@{ui} and @{i}fn2@{ui} to the integer variable @{i}%a@{ui} and @{i}%b@{ui}
+  respectively.
+
+Now that we have the code assembled and the addresses of our two routines in @{i}%a@{ui}
+and @{i}%b@{ui} we can invoke them at will.  Again I show the simple case of just
+printing the value that was left in the BC register.
+
+  @{b}110 PRINT USR (%a)@{ub}
+  We use USR to call our machine code routine @{i}fn1@{ui}, the address of which is
+  stored in the @{i}%a@{ui} integer variable.
+
+  @{b}120 PRINT USR (%b)@{ub}
+  Similarly we call to the machine code routine @{i}fn2@{ui}, which has its address
+  stored in the @{i}%b@{ui} integer variable.
+
+@{h2}Example creating a reusable routine
+
+The following example creates a simple flood fill routine that can be called
+from NextBASIC to fill arbitrary shapes.  NOTE this is just an example, large
+fill areas will result in a stack overflow :)
+
+See it in action:
+
+   10 REM Flood fill routine based on the NextBASIC code from em00k
+   20 RUN AT 0
+   30 SAVE "asmfloodfill.bas"
+   40 CLEAR $bfff
+   50 PROC assemble()
+   60 CIRCLE 64,110,30
+   70 CIRCLE 128,80,60
+   80 CIRCLE 192,110,30
+   90 PROC fill(128,80)
+  100 PROC fill(64,110)
+  110 PROC fill(192,110)
+  120 STOP
+  130 DEFPROC fill(x,y)
+  140   POKE %x,x: POKE %y,192-y
+  150   RANDOMIZE % USR $c000
+  160 ENDPROC
+  170 DEFPROC Assemble()
+  180 .asm
+  190 ;  ld de,(coords)
+  200 ;  call fill
+  210 ;  ret
+  220 ;fill
+  230 ;  call point
+  240 ;  ret nz
+  250 ;  call plot
+  260 ;  inc e
+  270 ;  call fill
+  280 ;  dec e
+  290 ;  dec e
+  300 ;  call fill
+  310 ;  inc e
+  320 ;  inc d
+  330 ;  call fill
+  340 ;  dec d
+  350 ;  dec d
+  360 ;  call fill
+  370 ;  inc d
+  380 ;  ret
+  390 ;plot
+  400 ;  pixelad
+  410 ;  setae
+  420 ;  or (hl)
+  430 ;  ld (hl), a
+  440 ;  ret
+  450 ;point
+  460 ;  pixelad
+  470 ;  setae
+  480 ;  and (hl)
+  490 ; ret
+  500 ;coords
+  510 ;x db 0
+  520 ;y db 0
+  530 ;  let %x=x
+  540 ;  let %y=y
+  550 ENDPROC
