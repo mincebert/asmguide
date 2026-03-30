@@ -1,0 +1,489 @@
+@title NextBASIC Inline Assembler Guide
+@author Robert Franklin
+@version 0.8
+@copyright Copyright (C) 2026 taylora
+@date 2026/03/28
+@index INDEX
+@----------------------------------------------------------------------------
+@node MAIN
+@toc MAIN
+@{r}NextBASIC Inline Assembler Guide
+@{c}@{h1}NextBASIC Inline Assembler Guide Contents
+
+@{" Labels " LINK LABELS}
+@{" Expressions " LINK EXPRESSIONS}
+@{" Pseudo operations " LINK PSEUDO_OPS}
+@{" Accessing NextBASIC integer variables " LINK VARS}
+@----------------------------------------------------------------------------
+@node LABELS
+@{r}NextBASIC Inline Assembler Guide
+@{c}@{h1}Labels
+
+The assembler recognizes both global and local (or scoped) labels.  Global
+labels must be unique throughout the entire program, whereas local labels must
+be unique within their respective scope.
+
+The "@{b}_@{ub}" symbol can be utilized independently to establish anonymous
+labels.  For enhanced readability, you have the option to append a "@{b}:@{ub}"
+following any label definition.
+
+@{h2}Global Labels
+
+Labels serve as identifiers for memory addresses or constants within an
+assembly application.  To define a label, simply type a name at the beginning
+of the line, immediately followed by the "@{b};@{ub}" that starts the assembly
+code line.
+
+For instance, by defining a label named @{i}loop@{ui}, we can easily refer to
+it in an assembly instruction to create an infinite loop, like so:
+
+  10 .asm
+  20 ;loop
+  30 ;  jp loop
+
+The @{i}loop@{ui} label denotes the memory address where the corresponding code
+is assembled.  During assembly, any reference to loop is substituted with its
+actual memory address.
+
+In our example, @{i}loop@{ui} is a global label.  This designation means it
+must be unique; otherwise, the assembler will flag it with a "duplicate
+definition” error.  While this ensures label uniqueness, it can be cumbersome
+when you want to reuse a label name for similar code patterns.
+
+That’s where local or scoped labels come in handy.  Each global label initiates
+a new scope, allowing you to define local labels within it.  These local labels
+won’t conflict with others in different scopes.  However, within the same
+scope, you must still avoid duplicate local label names
+
+@{h2}Local Labels
+
+Local labels, similar to global labels, are used to identify memory addresses
+or constant values.  The distinction lies in the prefix of a local label, which
+is a "@{b}.@{ub}".  This differentiates it from a global label and confines its
+scope.
+
+Here’s how you might structure your code using only global labels:
+
+   10 .asm
+   20 ;print
+   30 ;  ld a, 2
+   40 ;  call openChan
+   50 ;printCh
+   60 ;  ld a, (hl)
+   70 ;  or a
+   80 ;  jr z, printDone
+   90 ;  call printCh
+  100 ;  inc hl
+  110 ;  jp print
+  120 ;printDone
+  130 ;  jp printNL
+  140 ;
+  150 ;send
+  160 ;  ld bc,9600
+  170 ;  call initUart
+  180 ;nextCh
+  190 ;  ld a, (hl)
+  200 ;  or a
+  210 ;  jr z, sendDone
+  220 ;  call sendCh
+  230 ;  inc hl
+  240 ;  jp nextCh
+  250 ;sendDone
+  260 ;  call sendNL
+  270 ;  jp closeUart
+  ...
+
+In this example, we encounter a common pattern at the end of string processing:
+exiting the print or send loop.  Originally, we had to use distinct labels,
+@{i}printDone@{ui} and @{i}sendDone@{ui}, to differentiate the exit points for
+each routine.  Similarly, unique names were required for each
+character-processing address.  The use of @{i}sendCh@{ui} was not possible due
+to the preexistence of a @{i}sendCh@{ui} global label.
+
+However, with local labels, the need for unique global names
+diminishes.  Observe how the following example employs local labels to simplify
+the naming process
+
+   10 .asm
+   20 ;print
+   30 ;  ld a, 2
+   40 ;  call openChan
+   50 ;.ch
+   60 ;  ld a, (hl)
+   70 ;  or a
+   80 ;  jr z, .done
+   90 ;  call printCh
+  100 ;  inc hl
+  110 ;  jp print
+  120 ;.done
+  130 ;  jp printNL
+  140 ;
+  150 ;send
+  160 ;  ld bc,9600
+  170 ;  call initUart
+  180 ;.ch
+  190 ;  ld a, (hl)
+  200 ;  or a
+  210 ;  jr z, .done
+  220 ;  call sendCh
+  230 ;  inc hl
+  240 ;  jp .ch
+  250 ;.done
+  260 ;  call sendNL
+  260 ;  jp closeUart
+  ...
+
+In this setup, the @{i}.ch@{ui} and @{i}.done@{ui} labels are confined to their
+respective routines, allowing for their reuse across different routines without
+naming conflicts.  The @{i}print@{ui} label establishes a new scope, and any
+labels beginning with a "@{b}.@{ub}" are considered local to this
+scope.  Similarly, the @{i}send@{ui} label defines its own scope.
+
+@{h2}Label names
+
+Label names must meet the following requirements:
+
+  Max length:         15
+  Must start with:    "@{b}.@{ub}" or "@{b}_@{ub}" or @{b}a@{ub}..@{b}z@{ub}
+  Rest of the name:   "@{b}.@{ub}" or "@{b}_@{ub}" or @{b}a@{ub}..@{b}z@{ub} or @{b}0@{ub}..@{b}9@{b}
+
+When prefixed with a "@{b}.@{ub}", a label becomes scoped to the global label
+most recently declared before it.  The maximum length of a local label is
+contingent upon the length of its scope label’s name.  For instance, within the
+@{i}print@{ui} scope, the @{i}.ch@{ui} label effectively has a length of 8
+characters, whereas in the @{i}send@{ui} scope, it has a length of 7
+characters.
+
+@{h2}Referencing local labels across scopes
+
+If you need to reference a local label from a different scope, you can use its
+fully qualified name.  For instance, to jump to the @{i}.done@{ui} label within
+the print routine from an external scope, you could use the following method:
+
+  jp print.done
+
+@{h2}Anonymous Labels
+
+Anonymous labels are a powerful tool for creating jump targets in compact
+routines, eliminating the need for descriptive names.  They are especially
+beneficial in small routines with clear local loops or jumps.  It’s important
+to note that any instruction referencing an anonymous label will point to the
+nearest such label.
+
+Here’s how you can use them:
+
+  @{b}_@{ub}   is used to create a new anonymous label
+
+  @{b}-_@{ub}  points to the anonymous label immediately preceding the instruction
+
+  @{b}+_@{ub}  points to the anonymous label immediately following the instruction
+
+Let’s look at an example that illustrates the use of two anonymous labels and
+how you can selectively branch to either one.  For readability, we’ve placed an
+optional "@{b}:@{ub}" after the anonymous labels.
+
+  _:
+    ld a, (hl)
+    or a
+    jr z, +_     ; if register A is zero, jump forward to next anonymous label
+    rst $10
+    inc hl
+    jr -_        ; jump back to the preceding anonymous label
+  _:
+    ret
+@----------------------------------------------------------------------------
+@node EXPRESSIONS
+@{r}NextBASIC Inline Assembler Guide
+@{c}@{h1}Expressions
+
+The assembler follows the normal BODMAS/PEMDAS operator precedence
+rules.  Operators at the same precedence are evaluated left to right,
+sub-expressions within parentheses are evaluated before all other operators.
+
+Available operators are given in the table below, from high to low precedence:
+
+ Operator(s)    Description
+ -----------    --------------------------------------------
+ @{b}(@{ub}...@{b})@{ub}          Parenthesised sub-expressions
+ @{b}~@{ub},@{b}!@{ub},@{b}+@{ub},@{b}-@{ub}        Complement, logical NOT, unary plus/minus
+ @{b}*@{ub},@{b}/@{ub},@{b}%@{ub}          Multiplication, division, modulo (remainder)
+ @{b}+@{ub},@{b}-@{ub}            Addition, subtraction
+ @{b}<<@{ub},@{b}>>@{ub}          Bitwise shift
+ @{b}<@{ub},@{b}<=@{ub},@{b}>@{ub},@{b}>=@{ub}      Relational operators
+ @{b}=@{ub},@{b}<>@{ub}           Equal, not equal
+ @{b}&@{ub}              Bitwise AND
+ @{b}^@{ub}              Bitwise XOR
+ @{b}|@{ub}              Bitwise OR
+ @{b}&&@{ub}             Logical AND
+ @{b}||@{ub}             Logical OR
+
+See also: @{" Accessing NextBASIC integer variables " LINK VARS}
+@----------------------------------------------------------------------------
+@node PSEUDO_OPS
+@{r}NextBASIC Inline Assembler Guide
+@{c}@{h1}Pseudo operations
+
+ Operation         Meaning
+ ---------------   -----------------------------------------------------
+ @{" ALIGN " LINK ALIGN}           Aligns next instruction to a boundary
+ @{" ASSERT " LINK ASSERT}          Raise error if an expression evaluates to false
+ @{" BANK " LINK BANK}            Assemble directly to banked memory
+ @{" BRK " LINK BRK}             Insert CSpect BREAK instruction
+ @{" DB " LINK DX}              Define byte(s)
+ @{" DC " LINK DX}              Define string(s) terminated with high bit set
+ @{" DS " LINK DX}              Define space, all set to 0
+ @{" DW " LINK DX}              Define 16-bit word(s)
+ @{" DZ " LINK DX}              Define string(s) terminated with 0 byte
+ @{" DISPLAY " LINK DISPLAY}         Display information during assembly
+ @{" EQU " LINK EQU}             Define a constant
+ @{" IF/ELSE/ENDIF " LINK IF}   Conditional assembly
+ @{" INCLUDE " LINK INCLUDE}         Include a text file during assembly
+ @{" LET " LINK LET}             Set the value of a NextBASIC integer variable
+ @{" NBRK " LINK NBRK}            Insert hardware breakpoint, triggering Next debugger
+ @{" ORG " LINK ORG}             X
+ @{" OUTPUT " LINK OUTPUT}          X
+ @{" RELOC_COUNT " LINK RELOC}     X
+ @{" RELOC_END " LINK RELOC}       X
+ @{" RELOC_START " LINK RELOC}     X
+ @{" RELOC_TABLE " LINK RELOC}     X
+ @{" SAVENEX " LINK SAVENEX}         X
+ @{" VAR " LINK VAR}             X
+
+ $             Current address / program counter
+ #
+@----------------------------------------------------------------------------
+@node ALIGN
+@toc PSEUDO_OPS
+@{r}Pseudo operations
+
+@{c}@{h1}ALIGN
+
+Pseudo operation to align the address of the next instruction:
+
+  @{b}ALIGN@{ub} @{i}bytes@{ui}
+
+Aligns the next instruction to an address of multiple @{i}bytes@{ui}.  If an
+adjustment is required, the gap is padded with zeroes.
+
+@{i}bytes@{ui} must be a power of 2.
+
+See also: @{" DS (define) " LINK DX}
+@----------------------------------------------------------------------------
+@node ASSERT
+@{r}Pseudo operations
+
+@{c}@{h1}ASSERT
+
+Confirm an expression evaluates to true:
+
+  @{b}ASSERT@{ub} @{i}expr@{ui}
+
+Evaluates the expression @{i}exrp@{ui} - if it results in a false value an
+@{i}Assertion false@{ui} error is raised and assembly stopped.
+
+See also: @{" IF ... ELSE ... ENDIF " LINK IF}
+@----------------------------------------------------------------------------
+@node BANK
+@{r}Pseudo operations
+
+@{c}@{h1}BANK
+
+Set the target bank and offset for assembler output:
+
+ @{b}BANK@{ub} @{i}bank@{ui}[,[@{i}offset@{ui}]][,[@{i}clear@{ui}]]
+
+Assembles code to bank number @{i}bank@{ui} at the optional address
+@{i}offset@{ui} from the beginning - if omitted, assembly will start at offset
+0.
+
+If @{i}clear@{ui} is set to true, the bank's 16KByte of memory will be cleared
+first.
+
+Code assembled in this way can be run from NextBASIC using the @{b}BANK@{ub}
+... @{b}USR@{ub} function:
+
+  @{i}val@{ui} = @{b}BANK@{ub} @{i}bank@{ui} @{b}USR@{ub} @{i}offset@{ui}
+
+Note that this function will page in the bank at address 49152 ($c000), which
+is the same as the default value for @{" ORG " LINK ORG}.
+
+If using @{" LET " LINK LET} to return addresses into NextBASIC integer
+variables, care should be taken to adjust for offsets addressing, when using
+the @{b}BANK@{ub} operation.
+@----------------------------------------------------------------------------
+@node BRK
+@{r}Pseudo operations
+
+@{c}@{h1}BRK
+
+Insert a CSpect BREAK instruction:
+
+ @{b}BRK@{ub}
+
+This will trigger the CSpect emulator to break into the debugger.
+
+See also: @{" NBRK " LINK NBRK}
+@----------------------------------------------------------------------------
+@node DX
+@{r}Pseudo operations
+
+@{c}@{h1}Dx (define)
+
+Define a block of data:
+
+ @{b}DB@{ub} @{i}b1|s1@{ui}[,@{i}s2|b2@{ui}[,...]]
+ @{b}DC@{ub} @{i}s1@{ui}[,@{i}s2@{ui}[,...]]
+ @{b}DS@{ub} @{i}n@{ui}
+ @{b}DW@{ub} @{i}w1@{ui}[,@{i}w2@{ui}[,...]]
+ @{b}DZ@{ub} @{i}s1@{ui}[,@{i}s2@{ui}[,...]]
+
+The @{b}D@{ub}@{i}x@{ui} pseudo operations allow data to be inserted into the
+code.
+
+@{h2}DB - Define Byte(s)
+
+When given an integer, a byte of that value will be inserted into the generated
+code.  If a string is provided, the character codes for the bytes in the string
+will be inserted directly; no terminating character or mark will be added.
+
+A list of values can be supplied to store multiple bytes.  Integers and strings
+can be mixed in a single statement.
+
+@{h2}DC - Define Character(s)
+
+Similar to @{b}DB@{ub} but only accepting string arguments.  The final
+character in each string will have the high bit set (+128/$80).
+
+@{h2}DS - Define Space
+
+Defines a block of @{i}n@{ui} bytes, initialised to 0.
+
+@{h2}DW - Define Word(s)
+
+Defines a list of 16-bit words, little endian (least significant byte first).
+
+@{h2}DZ - Define Zero-terminated String(s)
+
+This is similar to @{b}DB@{ub} and @{b}DC@{ub}, except that each string will be
+terminated by a 0 byte.
+
+See also: @{" ALIGN " LINK ALIGN}
+@----------------------------------------------------------------------------
+@node DISPLAY
+@{r}Pseudo operations
+
+@{c}@{h1}DISPLAY
+
+Display information during the assembly process:
+
+ @{b}DISPLAY@{ub} {@{i}str@{ui}|@{i}expr@{ui}|@{b}/D@{ub}|@{b}/H@{ub}|@{b}/B@{ub}|@{b}/C@{ub}[,...]}
+
+Displays strings and/or the result of numeric expressions during the assembly
+process.
+
+The format for displaying numbers can be altered with switches:
+
+ Switch   Format
+ ------   -------------------------------------------------------------------
+ @{b}/D@{ub}       Decimal mode (default).
+ @{b}/H@{ub}       Hexadecimal mode - 2 digits for <=255/$ff, 4 digits for >=256/$100.
+ @{b}/B@{ub}       Binary mode - 8 bits for <=255/$ff, 16 bits for >=256/$100.
+ @{b}/C@{ub}       Character mode - uses the least significant byte as an ASCII value.
+
+When the format is changed, it will stay in effect until altered again.
+@----------------------------------------------------------------------------
+@node EQU
+@{r}Pseudo operations
+
+@{c}@{h1}EQU
+
+Define a constant:
+
+ @{i}name@{ui} @{b}EQU@{ub} @{i}expr@{ui}
+
+Defines the constant @{i}name@{ui} to the numeric value of the result of
+evaluating the expression @{i}expr@{ui}.
+
+See also: @{" LET " LINK LET}
+@----------------------------------------------------------------------------
+@node IF
+@{r}Pseudo operations
+
+@{c}@{h1}IF ... ELSE ... ENDIF
+
+Assemble a block of code conditionally:
+
+ @{b}IF@{ub} @{i}condition@{ui}
+  ...
+ [@{b}ELSE@{ub}
+  ...]
+ @{b}ENDIF@{ub}
+
+If the result of evaluating the expression @{i}condition@{ui} is true, the
+block of code following the @{b}IF@{ub} statement is assembled, otherwise the
+block of code following @{b}ELSE@{ub} is assembled, if present.
+
+Conditional code blocks can be nested up to 7 levels deep.
+
+See also: @{" ASSERT " LINK ASSERT}
+@----------------------------------------------------------------------------
+@node INCLUDE
+@{r}Pseudo operations
+
+@{c}@{h1}INCLUDE
+
+Include code from a separate file:
+
+ @{b}INCLUDE@{ub} "@{i}filename@{ui}"
+
+Includes the code from the file @{i}filename@{ui} in the
+assembly.  @{b}INCLUDE@{ub} can nest up to 8 levels deep, with no strict limit
+on the number of files that can be included.
+
+The included files are stored as plain text, without line numbers, or leading
+semicolons but, otherwise, must be in a format supported by the assembler in a
+NextBASIC program.
+@----------------------------------------------------------------------------
+@node LET
+@{r}Pseudo operations
+
+@{c}@{h1}LET
+
+Assign a value to a NextBASIC integer variable:
+
+ @{b}LET@{ub} @{i}var@{ui}=@{i}expr@{ui}
+
+Assigns the result of evaluating numeric expression @{i}expr@{ui} to the
+variable @{i}var@{ui}.  @{i}var@{ui} must be a NextBASIC integer variable (one
+with a leading '%' character).
+
+This function is useful to return the location of addresses in the assembled
+code, to be used by the surrounding program.
+
+@{h2}Address considerations when using BANK
+
+When assembling directly into banked memory, using the @{" BANK " LINK BANK}
+pseudo operation, returned addresses will need to be adjusted, if using
+offset instructions in NextBASIC.
+
+For example, the first address in a banked block will be 49152 (the address
+the code will be paged in at, when run).  If, however, an instruction such as
+@{b}BANK@{ub} @{i}bank@{ui} @{b}USR@{ub} @{i}offset@{ui} is used to execute
+code, 49152 will need to be subtracted from the address returned with
+@{b}LET@{ub}.
+
+See also: @{" EQU " LINK EQU}
+@----------------------------------------------------------------------------
+@node NBRK
+@{r}Pseudo operations
+
+@{c}@{h1}NBRK
+
+Insert a hardware breakpoint:
+
+ @{b}NBRK@{ub}
+
+This will trigger the NextZXOS debugger, equivalent to @{b}REG 2,8@{ub} in
+NextBASIC.
+
+See also: @{" BRK " LINK BRK}
