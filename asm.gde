@@ -13,7 +13,7 @@
 
 @{" Labels " LINK LABELS}
 @{" Expressions " LINK EXPRESSIONS}
-@{" Pseudo operations " LINK PSEUDOOPS}
+@{" Pseudo operations " LINK PSEUDO_OPS}
 @{" Accessing NextBASIC integer variables " LINK VARS}
 @-------------------------------------------------------------------------------
 @node LABELS
@@ -195,7 +195,7 @@ optional "@{b}:@{ub}" after the anonymous labels.
 @-------------------------------------------------------------------------------
 @node EXPRESSIONS
 @prev LABELS
-@next PSEUDOOPS
+@next PSEUDO_OPS
 @toc MAIN
 @{r}NextBASIC Inline Assembler Guide
 @{c}@{h1}Expressions
@@ -223,44 +223,306 @@ Available operators are given in the table below, from high to low precedence:
 
 See also: @{" Accessing NextBASIC integer variables " LINK VARS}
 @-------------------------------------------------------------------------------
-@node PSEUDOOPS
+@node PSEUDO_OPS
 @prev EXPRESSIONS
-@next VARS
+@next ALIGN
 @toc MAIN
 @{r}NextBASIC Inline Assembler Guide
 @{c}@{h1}Pseudo operations
 
  Operation     Meaning
- -----------   -----------
+ -----------   ---------------------------------------------------------------
+ @{" ALIGN " LINK ALIGN}           Aligns next instruction to a boundary
+ @{" ASSERT " LINK ASSERT}          Raise error if an expression evaluates to false
+ @{" BANK " LINK BANK}            Assemble directly to banked memory
+ @{" BRK " LINK BRK}             Insert CSpect BREAK instruction
+ @{" DB " LINK DX}              Define byte(s)
+ @{" DC " LINK DX}              Define string(s) terminated with high bit set
+ @{" DS " LINK DX}              Define space, all set to 0
+ @{" DW " LINK DX}              Define 16-bit word(s)
+ @{" DZ " LINK DX}              Define string(s) terminated with 0 byte
+ @{" DISPLAY " LINK DISPLAY}         Display information during assembly
+ @{" EQU " LINK EQU}             Define a constant
+ @{" IF/ELSE/ENDIF " LINK IF}   Conditional assembly
+ @{" INCLUDE " LINK INCLUDE}         Include a text file during assembly
+ @{" LET " LINK LET}             Set the value of a NextBASIC integer variable
+ @{" NBRK " LINK NBRK}            Insert hardware breakpoint, triggering Next debugger
+ @{" ORG " LINK ORG}             X
+ @{" OUTPUT " LINK OUTPUT}          X
+ @{" RELOC_COUNT " LINK RELOC}     X
+ @{" RELOC_END " LINK RELOC}       X
+ @{" RELOC_START " LINK RELOC}     X
+ @{" RELOC_TABLE " LINK RELOC}     X
+ @{" SAVENEX " LINK SAVENEX}         X
+ @{" VAR " LINK VAR}             X
+
  $             Current address / program counter
  #
- ALIGN n       Aligns next instruction to boundary n (n must be power of 2)
- ASSERT exp    Raise error if exp evaluates to false.
- BANK b[,o]    Assemble to bank 'b', optional offset 'o'
- BRK           Insert CSpect BREAK instruction, triggering CSpect debugger
- DB b[,...]    Define byte(s) 'b', or string of bytes
- DC s[,...]    Define string(s) 's' with last character having high bit set
- DS n          Define block of 'n' bytes, all set to 0
- DW w[,...]    Define 16-bit word(s) 'w'
- DZ s[,...]    Define string(s) 's' terminated by null (0)
- DISPLAY
- EQU
- IF/ELSE/END
- INCLUDE
- LET           See: @{" NextBASIC variables " LINK VARS}
- NBRK          Insert hardware breakpoint, triggering Next debugger
- ORG
- OUTPUT
- RELOC_COUNT
- RELOC_END
- RELOC_START
- RELOC_TABLE
- SAVENEX
- VAR
+@-------------------------------------------------------------------------------
+@node ALIGN
+@prev PSEUDO_OPS
+@next ASSERT
+@toc PSEUDO_OPS
+@{r}Pseudo operations
+
+@{c}@{h1}ALIGN
+
+Pseudo operation to align the address of the next instruction:
+
+  @{b}ALIGN@{ub} @{i}bytes@{ui}
+
+Aligns the next instruction to an address of multiple @{i}bytes@{ui}.  If an adjustment
+is required, the gap is padded with zeroes.
+
+@{i}bytes@{ui} must be a power of 2.
+
+See also: @{" DS (define) " LINK DX}
+@-------------------------------------------------------------------------------
+@node ASSERT
+@prev ALIGN
+@next BANK
+@toc PSEUDO_OPS
+@{r}Pseudo operations
+
+@{c}@{h1}ASSERT
+
+Confirm an expression evaluates to true:
+
+  @{b}ASSERT@{ub} @{i}expr@{ui}
+
+Evaluates the expression @{i}exrp@{ui} - if it results in a false value an @{i}Assertion
+false@{ui} error is raised and assembly stopped.
+
+See also: @{" IF...ELSE...ENDIF " LINK IF}
+@-------------------------------------------------------------------------------
+@node BANK
+@prev ASSERT
+@next BRK
+@toc PSEUDO_OPS
+@{r}Pseudo operations
+
+@{c}@{h1}BANK
+
+Set the target bank and offset for assembler output:
+
+ @{b}BANK@{ub} @{i}bank@{ui}[,[@{i}offset@{ui}]][,[@{i}clear@{ui}]]
+
+Assembles code to bank number @{i}bank@{ui} at the optional address @{i}offset@{ui} from the
+beginning - if omitted, assembly will start at offset 0.
+
+If @{i}clear@{ui} is set to true, the bank's 16KByte of memory will be cleared first.
+
+Code assembled in this way can be run from NextBASIC using the @{b}BANK@{ub} ... @{b}USR@{ub}
+function:
+
+  @{i}val@{ui} = @{b}BANK@{ub} @{i}bank@{ui} @{b}USR@{ub} @{i}offset@{ui}
+
+Note that this function will page in the bank at address 49152 ($c000), which is
+the same as the default value for @{" ORG " LINK ORG}.
+
+If using @{" LET " LINK LET} to return addresses into NextBASIC integer variables, care should
+be taken to adjust for offsets addressing, when using the @{b}BANK@{ub} operation.
+@-------------------------------------------------------------------------------
+@node BRK
+@prev BANK
+@next DX
+@toc PSEUDO_OPS
+@{r}Pseudo operations
+
+@{c}@{h1}BRK
+
+Insert a CSpect BREAK instruction:
+
+ @{b}BRK@{ub}
+
+This will trigger the CSpect emulator to break into the debugger.
+
+See also: @{" NBRK " LINK NBRK}
+@-------------------------------------------------------------------------------
+@node DX
+@prev BRK
+@next DISPLAY
+@toc PSEUDO_OPS
+@{r}Pseudo operations
+
+@{c}@{h1}Dx (define)
+
+Define a block of data:
+
+ @{b}DB@{ub} @{i}b1|s1@{ui}[,@{i}s2|b2@{ui}[,...]]
+ @{b}DC@{ub} @{i}s1@{ui}[,@{i}s2@{ui}[,...]]
+ @{b}DS@{ub} @{i}n@{ui}
+ @{b}DW@{ub} @{i}w1@{ui}[,@{i}w2@{ui}[,...]]
+ @{b}DZ@{ub} @{i}s1@{ui}[,@{i}s2@{ui}[,...]]
+
+The @{b}D@{ub}@{i}x@{ui} pseudo operations allow data to be inserted into the code.
+
+@{h2}DB - Define Byte(s)
+
+When given an integer, a byte of that value will be inserted into the generated
+code.  If a string is provided, the character codes for the bytes in the string
+will be inserted directly; no terminating character or mark will be added.
+
+A list of values can be supplied to store multiple bytes.  Integers and strings
+can be mixed in a single statement.
+
+@{h2}DC - Define Character(s)
+
+Similar to @{b}DB@{ub} but only accepting string arguments.  The final character in each
+string will have the high bit set (+128/$80).
+
+@{h2}DS - Define Space
+
+Defines a block of @{i}n@{ui} bytes, initialised to 0.
+
+@{h2}DW - Define Word(s)
+
+Defines a list of 16-bit words, little endian (least significant byte first).
+
+@{h2}DZ - Define Zero-terminated String(s)
+
+This is similar to @{b}DB@{ub} and @{b}DC@{ub}, except that each string will be terminated by a 0
+byte.
+
+See also: @{" ALIGN " LINK ALIGN}
+@-------------------------------------------------------------------------------
+@node DISPLAY
+@prev DX
+@next EQU
+@toc PSEUDO_OPS
+@{r}Pseudo operations
+
+@{c}@{h1}DISPLAY
+
+Display information during the assembly process:
+
+ @{b}DISPLAY@{ub} {@{i}str@{ui}|@{i}expr@{ui}|@{b}/D@{ub}|@{b}/H@{ub}|@{b}/B@{ub}|@{b}/C@{ub}[,...]}
+
+Displays strings and/or the result of numeric expressions during the assembly
+process.
+
+The format for displaying numbers can be altered with switches:
+
+ Switch   Format
+ ------   -------------------------------------------------------------------
+ @{b}/D@{ub}       Decimal mode (default).
+ @{b}/H@{ub}       Hexadecimal mode - 2 digits for <=255/$ff, 4 digits for >=256/$100.
+ @{b}/B@{ub}       Binary mode - 8 bits for <=255/$ff, 16 bits for >=256/$100.
+ @{b}/C@{ub}       Character mode - uses the least significant byte as an ASCII value.
+
+When the format is changed, it will stay in effect until altered again.
+@-------------------------------------------------------------------------------
+@node EQU
+@prev DISPLAY
+@next IF
+@toc PSEUDO_OPS
+@{r}Pseudo operations
+
+@{c}@{h1}EQU
+
+Define a constant:
+
+ @{i}name@{ui} @{b}EQU@{ub} @{i}expr@{ui}
+
+Defines the constant @{i}name@{ui} to the numeric value of the result of evaluating the
+expression @{i}expr@{ui}.
+
+See also: @{" LET " LINK LET}
+@-------------------------------------------------------------------------------
+@node IF
+@prev EQU
+@next INCLUDE
+@toc PSEUDO_OPS
+@{r}Pseudo operations
+
+@{c}@{h1}IF ... ELSE ... ENDIF
+
+Assemble a block of code conditionally:
+
+ @{b}IF@{ub} @{i}condition@{ui}
+  ...
+ [@{b}ELSE@{ub}
+  ...]
+ @{b}ENDIF@{ub}
+
+If the result of evaluating the expression @{i}condition@{ui} is true, the block of code
+following the @{b}IF@{ub} statement is assembled, otherwise the block of code following
+@{b}ELSE@{ub} is assembled, if present.
+
+Conditional code blocks can be nested up to 7 levels deep.
+
+See also: @{" ASSERT " LINK ASSERT}
+@-------------------------------------------------------------------------------
+@node INCLUDE
+@prev IF
+@next LET
+@toc PSEUDO_OPS
+@{r}Pseudo operations
+
+@{c}@{h1}INCLUDE
+
+Include code from a separate file:
+
+ @{b}INCLUDE@{ub} "@{i}filename@{ui}"
+
+Includes the code from the file @{i}filename@{ui} in the assembly.  @{b}INCLUDE@{ub} can nest up
+to 8 levels deep, with no strict limit on the number of files that can be
+included.
+
+The included files are stored as plain text, without line numbers, or leading
+semicolons but, otherwise, must be in a format supported by the assembler in a
+NextBASIC program.
+@-------------------------------------------------------------------------------
+@node LET
+@prev INCLUDE
+@next NBRK
+@toc PSEUDO_OPS
+@{r}Pseudo operations
+
+@{c}@{h1}LET
+
+Assign a value to a NextBASIC integer variable:
+
+ @{b}LET@{ub} @{i}var@{ui}=@{i}expr@{ui}
+
+Assigns the result of evaluating numeric expression @{i}expr@{ui} to the variable @{i}var@{ui}.
+@{i}var@{ui} must be a NextBASIC integer variable (one with a leading '%' character).
+
+This function is useful to return the location of addresses in the assembled
+code, to be used by the surrounding program.
+
+@{h2}Address considerations when using BANK
+
+When assembling directly into banked memory, using the @{" BANK " LINK BANK} pseudo operation,
+returned addresses will need to be adjusted, if using offset instructions in
+NextBASIC.
+
+For example, the first address in a banked block will be 49152 (the address the
+code will be paged in at, when run).  If, however, an instruction such as @{b}BANK@{ub}
+@{i}bank@{ui} @{b}USR@{ub} @{i}offset@{ui} is used to execute code, 49152 will need to be subtracted from
+the address returned with @{b}LET@{ub}.
+
+See also: @{" EQU " LINK EQU}
+@-------------------------------------------------------------------------------
+@node NBRK
+@prev LET
+@next VARS
+@toc PSEUDO_OPS
+@{r}Pseudo operations
+
+@{c}@{h1}NBRK
+
+Insert a hardware breakpoint:
+
+ @{b}NBRK@{ub}
+
+This will trigger the NextZXOS debugger, equivalent to @{b}REG 2,8@{ub} in NextBASIC.
+
+See also: @{" BRK " LINK BRK}
 @-------------------------------------------------------------------------------
 @node VARS
-@prev PSEUDOOPS
-@toc MAIN
+@prev NBRK
+@toc PSEUDO_OPS
 @{r}NextBASIC Inline Assembler Guide
 @{c}@{h1}Accessing NextBASIC integer variables
 
