@@ -200,6 +200,19 @@ optional "@{b}:@{ub}" after the anonymous labels.
 @{r}NextBASIC Inline Assembler Guide
 @{c}@{h1}Expressions
 
+In all places where the assembler accepts a value, an expression can be used to
+calculate the number.
+
+@{h2}Values in an expression
+
+An expression can make use of various values in calculating an expression:
+
+ * literal values
+ * labels (which correspond to the address of the label)
+ * '$' which will equal the current address / program counter at the expression
+
+@{h2}Operators and precedence
+
 The assembler follows the normal BODMAS/PEMDAS operator precedence rules.
 Operators at the same precedence are evaluated left to right, sub-expressions
 within parentheses are evaluated before all other operators.
@@ -221,7 +234,7 @@ Available operators are given in the table below, from high to low precedence:
  @{b}&&@{ub}             Logical AND
  @{b}||@{ub}             Logical OR
 
-See also: @{" Accessing NextBASIC integer variables " LINK VARS}
+See also: @{" EQU " LINK EQU}, @{" LET " LINK LET}, @{" VAR " LINK VAR}
 @-------------------------------------------------------------------------------
 @node PSEUDO_OPS
 @prev EXPRESSIONS
@@ -247,17 +260,14 @@ See also: @{" Accessing NextBASIC integer variables " LINK VARS}
  @{" INCLUDE " LINK INCLUDE}         Include a text file during assembly
  @{" LET " LINK LET}             Set the value of a NextBASIC integer variable
  @{" NBRK " LINK NBRK}            Insert hardware breakpoint, triggering Next debugger
- @{" ORG " LINK ORG}             X
- @{" OUTPUT " LINK OUTPUT}          X
- @{" RELOC_COUNT " LINK RELOC}     X
- @{" RELOC_END " LINK RELOC}       X
- @{" RELOC_START " LINK RELOC}     X
- @{" RELOC_TABLE " LINK RELOC}     X
- @{" SAVENEX " LINK SAVENEX}         X
- @{" VAR " LINK VAR}             X
-
- $             Current address / program counter
- #
+ @{" ORG " LINK ORG}             Set the base address for label calculation
+ @{" OUTPUT " LINK OUTPUT}          Write assembled code to a file
+ @{" RELOC_COUNT " LINK RELOC}     Return the number of relocations tracked.
+ @{" RELOC_END " LINK RELOC}       Mark the end of a relocation block.
+ @{" RELOC_START " LINK RELOC}     Mark the start of a relocation block.
+ @{" RELOC_TABLE " LINK RELOC}     Emit a relocation table.
+ @{" SAVENEX " LINK SAVENEX}         Save a block of memory as a ".nex" file.
+ @{" VAR " LINK VAR}             Declare a named value to be variable.
 @-------------------------------------------------------------------------------
 @node ALIGN
 @prev PSEUDO_OPS
@@ -322,6 +332,8 @@ the same as the default value for @{" ORG " LINK ORG}.
 
 If using @{" LET " LINK LET} to return addresses into NextBASIC integer variables, care should
 be taken to adjust for offsets addressing, when using the @{b}BANK@{ub} operation.
+
+See also: @{" ORG " LINK ORG}, @{" OUTPUT " LINK OUTPUT}
 @-------------------------------------------------------------------------------
 @node BRK
 @prev BANK
@@ -472,6 +484,8 @@ included.
 The included files are stored as plain text, without line numbers, or leading
 semicolons but, otherwise, must be in a format supported by the assembler in a
 NextBASIC program.
+
+See also: @{" OUTPUT " LINK OUTPUT}
 @-------------------------------------------------------------------------------
 @node LET
 @prev INCLUDE
@@ -506,6 +520,7 @@ See also: @{" EQU " LINK EQU}
 @-------------------------------------------------------------------------------
 @node NBRK
 @prev LET
+@next ORG
 @toc PSEUDO_OPS
 @{r}Pseudo operations
 
@@ -518,3 +533,130 @@ Insert a hardware breakpoint:
 This will trigger the NextZXOS debugger, equivalent to @{b}REG 2,8@{ub} in NextBASIC.
 
 See also: @{" BRK " LINK BRK}
+@-------------------------------------------------------------------------------
+@node ORG
+@prev NBRK
+@next OUTPUT
+@toc PSEUDO_OPS
+@{r}Pseudo operations
+
+@{c}@{h1}ORG
+
+Set the address at that point in assembly:
+
+ @{b}ORG@{ub} @{i}addr@{ui}
+
+The behaviour of @{b}ORG@{ub} depends on the target specified for assembled code,
+controlled by the @{" BANK " LINK BANK} and @{" OUTPUT " LINK OUTPUT} pseudo operations.
+
+@{h2}Main memory
+
+If neither @{b}BANK@{ub} nor @{b}OUTPUT@{ub} have been specified, @{b}ORG@{ub} assembles code to main
+memory at @{i}addr@{ui}.
+
+To avoid corrupting memory used by NextBASIC, the @{b}CLEAR@{ub} command should be used
+with a value lower than @{i}addr@{ui}, to protect the memory above it.
+
+@{h2}Banked memory
+
+If the @{b}BANK@{ub} pseudo operation has been specified, code is assembled to the bank
+and offset specified with that operation; @{b}ORG@{ub} will, however, set the base
+address used to calculate labels to @{i}addr@{ui}.
+
+@{h2}Output to a file
+
+If the @{b}OUTPUT@{ub} pseudo operation has been used, code will be written to the
+specified file, but the base address used for calculating labels will be set to
+@{i}addr@{ui}.
+@-------------------------------------------------------------------------------
+@node OUTPUT
+@prev ORG
+@next RELOC
+@toc PSEUDO_OPS
+@{r}Pseudo operations
+
+@{c}@{h1}OUTPUT
+
+Write assembled code to a file:
+
+ @{b}OUTPUT@{ub} "@{i}filename@{ui}"
+
+Directs the assembler to write the generated machine code directly to a file
+specified by @{i}filename@{ui}.
+
+See also: @{" BANK " LINK BANK}, @{" INCLUDE " LINK INCLUDE}, @{" ORG " LINK ORG}
+@-------------------------------------------------------------------------------
+@node RELOC
+@prev OUTPUT
+@next SAVENEX
+@toc PSEUDO_OPS
+@{r}Pseudo operations
+
+@{c}@{h1}RELOC_x (relocation table)
+
+Generate relocation information for NextZXOS drivers:
+
+ @{b}RELOC_COUNT@{ub}
+ @{b}RELOC_END@{ub}
+ @{b}RELOC_START@{ub}
+ @{b}RELOC_TABLE@{ub}
+
+A block of code can be marked with @{b}RELOC_START@{ub} and @{b}RELOC_END@{ub} to track
+relocations.
+
+@{b}RELOC_COUNT@{ub} will return the number of relocations in tracked code in a tracked
+block.
+
+@{b}RELOC_TABLE@{ub} will emit the relocation block.  The table is a raw dump of the high
+byte of every address that will need to be patched to relocate the code.  The
+format of this table is specifically designed to support the creation of
+NextZXOS drivers.
+@-------------------------------------------------------------------------------
+@node SAVENEX
+@prev RELOC
+@next VAR
+@toc PSEUDO_OPS
+@{r}Pseudo operations
+
+@{c}@{h1}SAVENEX
+
+Generate a ".nex" file from the assembled code:
+
+ @{b}SAVENEX@{ub} "@{i}filename@{ui}",@{i}start-addr@{ui},@{i}stack-addr@{ui}[,@{i}required-ram@{ui}[,@{i}entry-bank@{ui}]]
+
+The @{b}SAVENEX@{ub} pseudo operation should be used after code has been assembled to
+write out ...
+
+TODO
+
+@{i}start-addr@{ui} is start of block to save; end is PC ($)?
+
+@{i}stack-addr@{ui} is top of stack, so ample space below this address must be reserved
+by the code with @{" DS " LINK DX}.
+
+@{i}required-ram@{ui}?
+
+@{i}entry-bank@{ui}?
+
+See also: @{" OUTPUT " LINK OUTPUT}
+@-------------------------------------------------------------------------------
+@node VAR
+@prev SAVENEX
+@toc PSEUDO_OPS
+@{r}Pseudo operations
+
+@{c}@{h1}VAR
+
+Declares a named value to be variable between passes:
+
+ @{b}VAR@{ub} @{i}expr@{ui}
+
+When assembling code with @{" expressions " LINK EXPRESSIONS} that vary between passes (typically by
+using a label which occurs later in the code), the assembler will abort with a
+@{i}Value changed@{ui} error.  The @{b}VAR@{ub} pseudo operation will avoid this.
+
+Typically @{b}VAR@{ub} will be used with an @{i}expr@{ui} of '$' (for the current address).
+
+Once a value is declared as a variable with @{b}VAR@{ub}, that property will propagate
+through to all places where it is used (e.g. if the value is used in an @{" EQU " LINK EQU}
+calculation, this will be variable).
