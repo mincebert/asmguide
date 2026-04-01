@@ -288,8 +288,9 @@ Confirm an expression evaluates to true:
 
   @{b}ASSERT@{ub} @{i}expr@{ui}
 
-Evaluates the expression @{i}exrp@{ui} - if it results in a false value an
-@{i}Assertion false@{ui} error is raised and assembly stopped.
+Evaluates the @{" expression " LINK EXPRESSIONS} @{i}expr@{ui} - if it results
+in a false value an @{i}Assertion false@{ui} error is raised and assembly
+stopped.
 
 See also: @{" IF ... ELSE ... ENDIF " LINK IF}
 @----------------------------------------------------------------------------
@@ -390,8 +391,8 @@ Display information during the assembly process:
 
  @{b}DISPLAY@{ub} {@{i}str@{ui}|@{i}expr@{ui}|@{b}/D@{ub}|@{b}/H@{ub}|@{b}/B@{ub}|@{b}/C@{ub}[,...]}
 
-Displays strings and/or the result of numeric expressions during the assembly
-process.
+Displays strings and/or the result of numeric
+@{" expressions " LINK EXPRESSIONS} during the assembly process.
 
 The format for displaying numbers can be altered with switches:
 
@@ -414,7 +415,7 @@ Define a constant:
  @{i}name@{ui} @{b}EQU@{ub} @{i}expr@{ui}
 
 Defines the constant @{i}name@{ui} to the numeric value of the result of
-evaluating the expression @{i}expr@{ui}.
+evaluating the @{" expression " LINK EXPRESSIONS} @{i}expr@{ui}.
 
 See also: @{" LET " LINK LET}
 @----------------------------------------------------------------------------
@@ -431,9 +432,10 @@ Assemble a block of code conditionally:
   ...]
  @{b}ENDIF@{ub}
 
-If the result of evaluating the expression @{i}condition@{ui} is true, the
-block of code following the @{b}IF@{ub} statement is assembled, otherwise the
-block of code following @{b}ELSE@{ub} is assembled, if present.
+If the result of evaluating the @{" expression " LINK EXPRESSIONS}
+@{i}condition@{ui} is true, the block of code following the @{b}IF@{ub}
+statement is assembled, otherwise the block of code following @{b}ELSE@{ub} is
+assembled, if present.
 
 Conditional code blocks can be nested up to 7 levels deep.
 
@@ -467,9 +469,9 @@ Assign a value to a NextBASIC integer variable:
 
  @{b}LET@{ub} @{i}var@{ui}=@{i}expr@{ui}
 
-Assigns the result of evaluating numeric expression @{i}expr@{ui} to the
-variable @{i}var@{ui}.  @{i}var@{ui} must be a NextBASIC integer variable (one
-with a leading '%' character).
+Assigns the result of evaluating numeric @{" expression " LINK EXPRESSIONS}
+@{i}expr@{ui} to the variable @{i}var@{ui}.  @{i}var@{ui} must be a NextBASIC
+integer variable (one with a leading '%' character).
 
 This function is useful to return the location of addresses in the assembled
 code, to be used by the surrounding program.
