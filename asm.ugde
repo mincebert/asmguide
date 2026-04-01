@@ -13,7 +13,8 @@
 @{" Labels " LINK LABELS}
 @{" Expressions " LINK EXPRESSIONS}
 @{" Pseudo operations " LINK PSEUDO_OPS}
-@{" Accessing NextBASIC integer variables " LINK VARS}
+
+@{" Accessing NextBASIC integer variables " LINK VAR}
 @----------------------------------------------------------------------------
 @node LABELS
 @{r}NextBASIC Inline Assembler Guide
@@ -506,3 +507,37 @@ current address).
 Once a value is declared as a variable with @{b}VAR@{ub}, that property will
 propagate through to all places where it is used (e.g. if the value is used in
 an @{" EQU " LINK EQU} calculation, this will be variable).
+@----------------------------------------------------------------------------
+@node INDEX
+@{r}.asm inline assembler
+
+@{c}@{h1}Index
+
+ @{" ALIGN " LINK ALIGN}
+ @{" ASSERT " LINK ASSERT}
+ @{" BANK " LINK BANK}
+ @{" BRK " LINK BRK}
+ @{" DB " LINK DX}
+ @{" DC " LINK DX}
+ @{" DS " LINK DX}
+ @{" DW " LINK DX}
+ @{" DZ " LINK DX}
+ @{" DISPLAY " LINK DISPLAY}
+ @{b}ELSE@{ub}                     @{" IF ... ELSE ... ENDIF " LINK IF}
+ @{b}ENDIF@{ub}                    @{" IF ... ELSE ... ENDIF " LINK IF}
+ @{" EQU " LINK EQU}
+ @{" Expressions " LINK EXPRESSIONS}
+ @{" IF ... ELSE ... ENDIF " LINK IF}
+ @{" INCLUDE " LINK INCLUDE}
+ @{" Labels " LINK LABELS}
+ @{" LET " LINK LET}
+ @{" NBRK " LINK NBRK}
+ @{" ORG " LINK ORG}
+ @{" OUTPUT " LINK OUTPUT}
+ @{" Pseudo operations " LINK PSEUDO_OPS}
+ @{b}RELOC_COUNT@{ub}              @{" RELOC_x (relocation table) " LINK RELOC}
+ @{b}RELOC_END@{ub}                @{" RELOC_x (relocation table) " LINK RELOC}
+ @{b}RELOC_START@{ub}              @{" RELOC_x (relocation table) " LINK RELOC}
+ @{b}RELOC_TABLE@{ub}              @{" RELOC_x (relocation table) " LINK RELOC}
+ @{" SAVENEX " LINK SAVENEX}
+ @{" VAR " LINK VAR}
