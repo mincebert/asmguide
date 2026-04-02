@@ -1,4 +1,4 @@
-@title NextBASIC Inline Assembler Guide
+@title .asm inline assembler
 @author Robert Franklin
 @version 0.8
 @copyright Copyright (C) 2026 taylora
@@ -7,17 +7,88 @@
 @----------------------------------------------------------------------------
 @node MAIN
 @toc MAIN
-@{r}NextBASIC Inline Assembler Guide
-@{c}@{h1}NextBASIC Inline Assembler Guide Contents
+@{r}.asm inline assembler
+@{c}@{h1}Contents
 
+@{" Starting .asm " LINK STARTING}
 @{" Labels " LINK LABELS}
 @{" Expressions " LINK EXPRESSIONS}
 @{" Pseudo operations " LINK PSEUDO_OPS}
 
 @{" Accessing NextBASIC integer variables " LINK VAR}
 @----------------------------------------------------------------------------
+@node STARTING
+@{r}.asm inline assembler
+
+@{c}@{h1}Starting .asm
+
+There are two main ways to run @{b}.asm@{ub}:
+
+ * from within a NextBASIC program, or
+ * from the command line.
+
+@{h2}From within a NextBASIC program
+
+Here, @{b}.asm@{ub} is run from inside a program as a command, for example:
+
+  10 SAVE "asmprint.bas" : REM Just in case things go wrong
+  20 CLEAR $bfff : REM Move RAMTOP so we have some space for our code
+  30 @{b}.asm@{ub} : REM Assemble our code
+  40 ;@{i}    ld a, 2@{ui}
+  50 ;@{i}    call $1601@{ui}
+  60 ;@{i}loop@{ui}
+  70 ;@{i}    ld de, msg@{ui}
+  80 ;@{i}    ld bc, eom-msg@{ui}
+  90 ;@{i}    call $203c@{ui}
+ 100 ;@{i}    jr loop@{ui}
+ 110 ;@{i}msg db "Hello World", 13@{ui}
+ 120 ;@{i}eom equ $@{ui}
+ 130 RANDOMIZE USR ($c000) : REM Call our machine code routine
+
+@{b}.asm@{ub} will detect the line from which it is being run and begin
+assembly from the following line (in the above example, this is line 40).
+
+Lines of the assembly language program are marked with leading '@{b};@{ub}'
+(semicolon) characters and continue until the first line which does NOT begin
+with a '@{b};@{ub}' (up to and including line 120, above).  The semicolon
+character normally marks a comment in a NextBASIC program (the same as
+@{b}REM@{ub}) so would otherwise be ignored.
+
+When used in this mode, the @{" LET " LINK LET}
+@{" pseudo operation " LINK PSEUDO_OPS} is useful to feed addresses from the
+assembled code back into the containing program.
+
+@{h2}From the command line
+
+@{b}.asm@{ub} can also be run directly from the command line (including in
+immediate mode in NextBASIC - a command entered without a line number).
+
+In this situation, the program to be assembled is provided in a file and the
+name of that file supplied as an argument on the command line.
+
+The file must be in plain text, consisting of just the assembly lanugage code
+(and any labels or pseudo operations), without BASIC line numbers.  Assembly
+will stop at the end of the file.
+
+See also: @{" OUTPUT " LINK OUTPUT}
+@----------------------------------------------------------------------------
+@node FORMAT
+@{r}.asm inline assembler
+
+@{c}@{h1}Program format
+
+If a @{" label " LINK LABELS} is specified on a line, it must appear at the
+beginning, without any leading spaces.  It can optionally be followed by a
+trailing '@{b}:@{ub}' (colon).
+
+Instructions or @{" pseudo operations " LINK PSEUDO_OPS} can appear after a
+label (with intervening space) or on a separate line.  If on a separate line,
+there must be one or more leading spaces, to indicate it is not a label.
+
+Assembly instructions can be in lower or upper case.
+@----------------------------------------------------------------------------
 @node LABELS
-@{r}NextBASIC Inline Assembler Guide
+@{r}.asm inline assembler
 
 @{c}@{h1}Labels
 
@@ -30,6 +101,13 @@ The assembler supports three main types of label:
 Labels can be used as operands to assembly instructions (for example, as a jump
 destination address), or as values in an @{" expression " LINK EXPRESSIONS}.
 
+A label is identified as such, and not an instruction or
+@{" pseudo operation " LINK PSEUDO_OPS} by appearing at the beginning of a
+line, with no leading spaces.
+
+A label can optionally be followed by a '@{b}:@{ub}' for readability, but this
+has no effect on the name.  Label names are case-insensitive.
+
 @{h2}Global labels
 
 Global labels have names beginning with a letter '@{b}a@{ub}' to '@{b}z@{ub}'
@@ -39,9 +117,7 @@ directly.
 The entire name has the following format, limited to a maximum of 15 characters
 in total:
 
- {@{b}a@{ub}..@{b}z@{ub}}{@{b}.@{ub}, @{b}_@{ub}, @{b}a@{ub}..@{b}z@{ub}, @{b}0@{ub}..@{b}9@{ub}}*
-
-(* = zero or more occurrences)
+ {@{b}a@{ub}..@{b}z@{ub}}{@{b}.@{ub} @{b}_@{ub} @{b}a@{ub}..@{b}z@{ub} @{b}0@{ub}..@{b}9@{ub}}*                (* = zero or more occurrences)
 
 @{h2}Local labels
 
@@ -51,10 +127,10 @@ beginning of the code) and ends with the next global label.
 
 The entire name has the format:
 
- @{b}.@{ub}{@{b}.@{ub}, @{b}_@{ub}, @{b}a@{ub}..@{b}z@{ub}, @{b}0@{ub}..@{b}9@{ub}}*
+ @{b}.@{ub}{@{b}.@{ub} @{b}_@{ub} @{b}a@{ub}..@{b}z@{ub} @{b}0@{ub}..@{b}9@{ub}}+                     (+ = one or more occurrences)
 
-The entire name, including the global label at the beginning of the scope, is
-limited to 15 characters.
+The entire name, including the global label used at the beginning of the scope,
+is limited to 15 characters.
 
 Within its scope, a name can be used directly (with the leading
 '@{b}.@{ub}').  To use a local label from another scope, it must be referenced
@@ -79,7 +155,7 @@ only the previous or next label can be referenced, so are only suitable for
 skipping short blocks, or jumping back to the start of the current loop.
 @----------------------------------------------------------------------------
 @node EXPRESSIONS
-@{r}NextBASIC Inline Assembler Guide
+@{r}.asm inline assembler
 
 @{c}@{h1}Expressions
 
@@ -91,8 +167,9 @@ calculate the number.
 An expression can make use of various values in calculating an expression:
 
  * literal values
- * @{" labels " LINK LABELS} (which correspond to the address of the label)
- * '@{b}$@{ub}' which will equal the current address / program counter
+ * @{" labels " LINK LABELS} - corresponding to the address of the label)
+ * '@{b}$@{ub}' - the current instruction address / program counter
+ * '@{b}%@{ub}@{i}var@{ui}' - NextBASIC integer variable values
 
 @{h2}Operators and precedence
 
@@ -102,25 +179,26 @@ sub-expressions within parentheses are evaluated before all other operators.
 
 Available operators are given in the table below, from high to low precedence:
 
- Operator(s)    Description
- -----------    --------------------------------------------
- @{b}(@{ub}...@{b})@{ub}          Parenthesised sub-expressions
- @{b}~@{ub},@{b}!@{ub},@{b}+@{ub},@{b}-@{ub}        Complement, logical NOT, unary plus/minus
- @{b}*@{ub},@{b}/@{ub},@{b}%@{ub}          Multiplication, division, modulo (remainder)
- @{b}+@{ub},@{b}-@{ub}            Addition, subtraction
- @{b}<<@{ub},@{b}>>@{ub}          Bitwise shift
- @{b}<@{ub},@{b}<=@{ub},@{b}>@{ub},@{b}>=@{ub}      Relational operators
- @{b}=@{ub},@{b}<>@{ub}           Equal, not equal
- @{b}&@{ub}              Bitwise AND
- @{b}^@{ub}              Bitwise XOR
- @{b}|@{ub}              Bitwise OR
- @{b}&&@{ub}             Logical AND
- @{b}||@{ub}             Logical OR
+ Operator(s)   Description
+ -----------   --------------------------------------------
+ @{b}(@{ub}...@{b})@{ub}         Parenthesised sub-expressions
+ @{b}~@{ub},@{b}!@{ub},@{b}+@{ub},@{b}-@{ub}       Complement, logical NOT, unary plus/minus
+ @{b}*@{ub},@{b}/@{ub},@{b}%@{ub}         Multiplication, division, modulo (remainder)
+ @{b}+@{ub},@{b}-@{ub}           Addition, subtraction
+ @{b}<<@{ub},@{b}>>@{ub}         Bitwise shift
+ @{b}<@{ub},@{b}<=@{ub},@{b}>@{ub},@{b}>=@{ub}     Relational operators
+ @{b}=@{ub},@{b}<>@{ub}          Equal, not equal
+ @{b}&@{ub}             Bitwise AND
+ @{b}^@{ub}             Bitwise XOR
+ @{b}|@{ub}             Bitwise OR
+ @{b}&&@{ub}            Logical AND
+ @{b}||@{ub}            Logical OR
 
 See also: @{" EQU " LINK EQU}, @{" LET " LINK LET}, @{" VAR " LINK VAR}
 @----------------------------------------------------------------------------
 @node PSEUDO_OPS
-@{r}NextBASIC Inline Assembler Guide
+@{r}.asm inline assembler
+
 @{c}@{h1}Pseudo operations
 
  Operation         Meaning
@@ -222,7 +300,7 @@ Insert a CSpect BREAK instruction:
 
 This will trigger the CSpect emulator to break into the debugger.
 
-See also: @{" NBRK " LINK NBRK}
+See also: @{" ASSERT " LINK ASSERT}, @{" NBRK " LINK NBRK}
 @----------------------------------------------------------------------------
 @node DX
 @{r}Pseudo operations
@@ -358,7 +436,7 @@ Assign a value to a NextBASIC integer variable:
 
 Assigns the result of evaluating numeric @{" expression " LINK EXPRESSIONS}
 @{i}expr@{ui} to the variable @{i}var@{ui}.  @{i}var@{ui} must be a NextBASIC
-integer variable (one with a leading '%' character).
+integer variable (one with a leading '@{b}%@{ub}' character).
 
 This function is useful to return the location of addresses in the assembled
 code, to be used by the surrounding program.
@@ -386,10 +464,10 @@ Insert a hardware breakpoint:
 
  @{b}NBRK@{ub}
 
-This will trigger the NextZXOS debugger, equivalent to the instruction
+This will trigger the NextZXOS debugger, equivalent to the assembly instruction
 @{b}NEXTREG 2,8@{ub} (or @{b}REG 2,8@{ub} in NextBASIC).
 
-See also: @{" BRK " LINK BRK}
+See also: @{" ASSERT " LINK ASSERT}, @{" BRK " LINK BRK}
 @----------------------------------------------------------------------------
 @node ORG
 @{r}Pseudo operations
@@ -403,6 +481,8 @@ Set the address at that point in assembly:
 The behaviour of @{b}ORG@{ub} depends on the target specified for assembled
 code, controlled by the @{" BANK " LINK BANK} and @{" OUTPUT " LINK OUTPUT}
 pseudo operations.
+
+The default is to assemble to address 49152 ($c000).
 
 @{h2}Main memory
 
@@ -437,7 +517,7 @@ Directs the assembler to write the generated machine code directly to a file
 specified by @{i}filename@{ui}.
 
 See also: @{" BANK " LINK BANK},
-@{" INCLUDE " LINK INCLUDE}, @{" ORG " LINK ORG}
+@{" INCLUDE " LINK INCLUDE}, @{" ORG " LINK ORG}, @{" SAVENEX " LINK SAVENEX}
 @----------------------------------------------------------------------------
 @node RELOC
 @{r}Pseudo operations
@@ -501,8 +581,8 @@ passes (typically by using a label which occurs later in the code), the
 assembler will abort with a @{i}Value changed@{ui} error.  The @{b}VAR@{ub}
 pseudo operation will avoid this.
 
-Typically @{b}VAR@{ub} will be used with an @{i}expr@{ui} of '$' (for the
-current address).
+Typically @{b}VAR@{ub} will be used with an @{i}expr@{ui} of '@{b}$@{ub}' (for
+the current address).
 
 Once a value is declared as a variable with @{b}VAR@{ub}, that property will
 propagate through to all places where it is used (e.g. if the value is used in
@@ -540,4 +620,5 @@ an @{" EQU " LINK EQU} calculation, this will be variable).
  @{b}RELOC_START@{ub}              @{" RELOC_x (relocation table) " LINK RELOC}
  @{b}RELOC_TABLE@{ub}              @{" RELOC_x (relocation table) " LINK RELOC}
  @{" SAVENEX " LINK SAVENEX}
+ @{" Starting .asm " LINK STARTING}
  @{" VAR " LINK VAR}
