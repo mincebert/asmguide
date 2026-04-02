@@ -4,12 +4,17 @@
 .asm inline assembler
 Contents
 
+.asm is an assembler which can assemble code embedded in a NextBASIC program, or
+from a source text file.
+
 <Starting .asm>
+
+<Program format>
 <Labels>
 <Expressions>
 <Pseudo operations>
 
-<Accessing NextBASIC integer variables>
+<Index>
 
 ---[ STARTING ]----------------------------------------------------------------
 
@@ -527,8 +532,8 @@ Generate relocation information for NextZXOS drivers:
  RELOC_START
  RELOC_TABLE
 
-A block of code can be marked with RELOC_START and RELOC_END to track
-relocations.
+A block of code can be marked with the RELOC_START and RELOC_END pseudo
+operations to track relocations.
 
 RELOC_COUNT will return the number of relocations in tracked code in a tracked
 block.
@@ -600,8 +605,8 @@ Index
  <DW>
  <DZ>
  <DISPLAY>
- ELSE                     <IF ... ELSE ... ENDIF>
- ENDIF                    <IF ... ELSE ... ENDIF>
+  ELSE                    <IF ... ELSE ... ENDIF>
+  ENDIF                   <IF ... ELSE ... ENDIF>
  <EQU>
  <Expressions>
  <IF ... ELSE ... ENDIF>
@@ -611,11 +616,12 @@ Index
  <NBRK>
  <ORG>
  <OUTPUT>
+ <Program format>
  <Pseudo operations>
- RELOC_COUNT              <RELOC_x (relocation table)>
- RELOC_END                <RELOC_x (relocation table)>
- RELOC_START              <RELOC_x (relocation table)>
- RELOC_TABLE              <RELOC_x (relocation table)>
+  RELOC_COUNT             <RELOC_x (relocation table)>
+  RELOC_END               <RELOC_x (relocation table)>
+  RELOC_START             <RELOC_x (relocation table)>
+  RELOC_TABLE             <RELOC_x (relocation table)>
  <SAVENEX>
  <Starting .asm>
  <VAR>

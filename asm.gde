@@ -11,12 +11,17 @@
 @{r}.asm inline assembler
 @{c}@{h1}Contents
 
+@{b}.asm@{ub} is an assembler which can assemble code embedded in a NextBASIC program, or
+from a source text file.
+
 @{" Starting .asm " LINK STARTING}
+
+@{" Program format " LINK FORMAT}
 @{" Labels " LINK LABELS}
 @{" Expressions " LINK EXPRESSIONS}
 @{" Pseudo operations " LINK PSEUDO_OPS}
 
-@{" Accessing NextBASIC integer variables " LINK VAR}
+@{" Index " LINK INDEX}
 @-------------------------------------------------------------------------------
 @node STARTING
 @prev MAIN
@@ -572,8 +577,8 @@ Generate relocation information for NextZXOS drivers:
  @{b}RELOC_START@{ub}
  @{b}RELOC_TABLE@{ub}
 
-A block of code can be marked with @{b}RELOC_START@{ub} and @{b}RELOC_END@{ub} to track
-relocations.
+A block of code can be marked with the @{b}RELOC_START@{ub} and @{b}RELOC_END@{ub} pseudo
+operations to track relocations.
 
 @{b}RELOC_COUNT@{ub} will return the number of relocations in tracked code in a tracked
 block.
@@ -650,8 +655,8 @@ calculation, this will be variable).
  @{" DW " LINK DX}
  @{" DZ " LINK DX}
  @{" DISPLAY " LINK DISPLAY}
- @{b}ELSE@{ub}                     @{" IF ... ELSE ... ENDIF " LINK IF}
- @{b}ENDIF@{ub}                    @{" IF ... ELSE ... ENDIF " LINK IF}
+  @{b}ELSE@{ub}                    @{" IF ... ELSE ... ENDIF " LINK IF}
+  @{b}ENDIF@{ub}                   @{" IF ... ELSE ... ENDIF " LINK IF}
  @{" EQU " LINK EQU}
  @{" Expressions " LINK EXPRESSIONS}
  @{" IF ... ELSE ... ENDIF " LINK IF}
@@ -661,11 +666,12 @@ calculation, this will be variable).
  @{" NBRK " LINK NBRK}
  @{" ORG " LINK ORG}
  @{" OUTPUT " LINK OUTPUT}
+ @{" Program format " LINK FORMAT}
  @{" Pseudo operations " LINK PSEUDO_OPS}
- @{b}RELOC_COUNT@{ub}              @{" RELOC_x (relocation table) " LINK RELOC}
- @{b}RELOC_END@{ub}                @{" RELOC_x (relocation table) " LINK RELOC}
- @{b}RELOC_START@{ub}              @{" RELOC_x (relocation table) " LINK RELOC}
- @{b}RELOC_TABLE@{ub}              @{" RELOC_x (relocation table) " LINK RELOC}
+  @{b}RELOC_COUNT@{ub}             @{" RELOC_x (relocation table) " LINK RELOC}
+  @{b}RELOC_END@{ub}               @{" RELOC_x (relocation table) " LINK RELOC}
+  @{b}RELOC_START@{ub}             @{" RELOC_x (relocation table) " LINK RELOC}
+  @{b}RELOC_TABLE@{ub}             @{" RELOC_x (relocation table) " LINK RELOC}
  @{" SAVENEX " LINK SAVENEX}
  @{" Starting .asm " LINK STARTING}
  @{" VAR " LINK VAR}
