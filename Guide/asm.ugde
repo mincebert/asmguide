@@ -292,7 +292,7 @@ If using @{" LET " LINK LET} to return addresses into NextBASIC integer
 variables, care should be taken to adjust for offsets addressing, when using
 the @{b}BANK@{ub} operation.
 
-See also: @{" ORG " LINK ORG}, @{" OUTPUT " LINK OUTPUT}
+See also: @{" OUTPUT " LINK OUTPUT}
 @----------------------------------------------------------------------------
 @node BRK
 @{r}Pseudo operations
