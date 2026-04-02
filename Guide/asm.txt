@@ -1,0 +1,621 @@
+
+---[ MAIN ]--------------------------------------------------------------------
+
+.asm inline assembler
+Contents
+
+<Starting .asm>
+<Labels>
+<Expressions>
+<Pseudo operations>
+
+<Accessing NextBASIC integer variables>
+
+---[ STARTING ]----------------------------------------------------------------
+
+.asm inline assembler
+
+Starting .asm
+
+There are two main ways to run .asm:
+
+ * from within a NextBASIC program, or
+ * from the command line.
+
+From within a NextBASIC program
+
+Here, .asm is run from inside a program as a command, for example:
+
+  10 SAVE "asmprint.bas" : REM Just in case things go wrong
+  20 CLEAR $bfff : REM Move RAMTOP so we have some space for our code
+  30 .asm : REM Assemble our code
+  40 ;    ld a, 2
+  50 ;    call $1601
+  60 ;loop
+  70 ;    ld de, msg
+  80 ;    ld bc, eom-msg
+  90 ;    call $203c
+ 100 ;    jr loop
+ 110 ;msg db "Hello World", 13
+ 120 ;eom equ $
+ 130 RANDOMIZE USR ($c000) : REM Call our machine code routine
+
+.asm will detect the line from which it is being run and begin assembly from the
+following line (in the above example, this is line 40).
+
+Lines of the assembly language program are marked with leading ';' (semicolon)
+characters and continue until the first line which does NOT begin with a ';' (up
+to and including line 120, above).  The semicolon character normally marks a
+comment in a NextBASIC program (the same as REM) so would otherwise be ignored.
+
+When used in this mode, the <LET> <pseudo operation> is useful to feed addresses
+from the assembled code back into the containing program.
+
+From the command line
+
+.asm can also be run directly from the command line (including in immediate mode
+in NextBASIC - a command entered without a line number).
+
+In this situation, the program to be assembled is provided in a file and the
+name of that file supplied as an argument on the command line.
+
+The file must be in plain text, consisting of just the assembly lanugage code
+(and any labels or pseudo operations), without BASIC line numbers.  Assembly
+will stop at the end of the file.
+
+See also: <OUTPUT>
+
+---[ FORMAT ]------------------------------------------------------------------
+
+.asm inline assembler
+
+Program format
+
+If a <label> is specified on a line, it must appear at the beginning, without
+any leading spaces.  It can optionally be followed by a trailing ':' (colon).
+
+Instructions or <pseudo operations> can appear after a label (with intervening
+space) or on a separate line.  If on a separate line, there must be one or more
+leading spaces, to indicate it is not a label.
+
+Assembly instructions can be in lower or upper case.
+
+---[ LABELS ]------------------------------------------------------------------
+
+.asm inline assembler
+
+Labels
+
+The assembler supports three main types of label:
+
+ * global labels
+ * local labels
+ * anonymous labels
+
+Labels can be used as operands to assembly instructions (for example, as a jump
+destination address), or as values in an <expression>.
+
+A label is identified as such, and not an instruction or <pseudo operation> by
+appearing at the beginning of a line, with no leading spaces.
+
+A label can optionally be followed by a ':' for readability, but this has no
+effect on the name.  Label names are case-insensitive.
+
+Global labels
+
+Global labels have names beginning with a letter 'a' to 'z' and are scoped to
+the entire program so can be referenced from anywhere directly.
+
+The entire name has the following format, limited to a maximum of 15 characters
+in total:
+
+ {a..z}{. _ a..z 0..9}*                (* = zero or more occurrences)
+
+Local labels
+
+Local labels have names beginning with a dot/period ('.') and are and are scoped
+to the block that starts with the previous global label (or beginning of the
+code) and ends with the next global label.
+
+The entire name has the format:
+
+ .{. _ a..z 0..9}+                     (+ = one or more occurrences)
+
+The entire name, including the global label used at the beginning of the scope,
+is limited to 15 characters.
+
+Within its scope, a name can be used directly (with the leading '.').  To use a
+local label from another scope, it must be referenced using the block's starting
+global label, then the local part (including '.').
+
+Local labels allow the reuse of local addresses for loops or to jump to other
+parts of the same block, without worrying about the name clashing with another
+part of the entire program.
+
+Anonymous labels
+
+An anonymous label has the name '_' (with no trailing characters).
+
+The label can be referenced using two forms:
+
+ * '-_' points to the previous anonymous label
+ * '+_' points to the next anonymous label
+
+Anonymous labels are not limited to a block delimited by global labels, but only
+the previous or next label can be referenced, so are only suitable for skipping
+short blocks, or jumping back to the start of the current loop.
+
+---[ EXPRESSIONS ]-------------------------------------------------------------
+
+.asm inline assembler
+
+Expressions
+
+In all places where the assembler accepts a value, an expression can be used to
+calculate the number.
+
+Values in an expression
+
+An expression can make use of various values in calculating an expression:
+
+ * literal values
+ * <labels> - corresponding to the address of the label)
+ * '$' - the current instruction address / program counter
+ * '%var' - NextBASIC integer variable values
+
+Operators and precedence
+
+The assembler follows the normal BODMAS/PEMDAS operator precedence rules.
+Operators at the same precedence are evaluated left to right, sub-expressions
+within parentheses are evaluated before all other operators.
+
+Available operators are given in the table below, from high to low precedence:
+
+ Operator(s)   Description
+ -----------   --------------------------------------------
+ (...)         Parenthesised sub-expressions
+ ~,!,+,-       Complement, logical NOT, unary plus/minus
+ *,/,%         Multiplication, division, modulo (remainder)
+ +,-           Addition, subtraction
+ <<,>>         Bitwise shift
+ <,<=,>,>=     Relational operators
+ =,<>          Equal, not equal
+ &             Bitwise AND
+ ^             Bitwise XOR
+ |             Bitwise OR
+ &&            Logical AND
+ ||            Logical OR
+
+See also: <EQU>, <LET>, <VAR>
+
+---[ PSEUDO_OPS ]--------------------------------------------------------------
+
+.asm inline assembler
+
+Pseudo operations
+
+ Operation         Meaning
+ ---------------   -----------------------------------------------------
+ <ALIGN>           Aligns next instruction to a boundary
+ <ASSERT>          Raise error if an expression evaluates to false
+ <BANK>            Assemble directly to banked memory
+ <BRK>             Insert CSpect BREAK instruction
+ <DB>              Define byte(s)
+ <DC>              Define string(s) terminated with high bit set
+ <DS>              Define space, all set to 0
+ <DW>              Define 16-bit word(s)
+ <DZ>              Define string(s) terminated with 0 byte
+ <DISPLAY>         Display information during assembly
+ <EQU>             Define a constant
+ <IF/ELSE/ENDIF>   Conditional assembly
+ <INCLUDE>         Include a text file during assembly
+ <LET>             Set the value of a NextBASIC integer variable
+ <NBRK>            Insert hardware breakpoint, triggering Next debugger
+ <ORG>             Set the base address for label calculation
+ <OUTPUT>          Write assembled code to a file
+ <RELOC_COUNT>     Return the number of relocations tracked.
+ <RELOC_END>       Mark the end of a relocation block.
+ <RELOC_START>     Mark the start of a relocation block.
+ <RELOC_TABLE>     Emit a relocation table.
+ <SAVENEX>         Save a block of memory as a ".nex" file.
+ <VAR>             Declare a named value to be variable.
+
+---[ ALIGN ]-------------------------------------------------------------------
+
+Pseudo operations
+
+ALIGN
+
+Pseudo operation to align the address of the next instruction:
+
+  ALIGN bytes
+
+Aligns the next instruction to an address of multiple bytes.  If an adjustment
+is required, the gap is padded with zeroes.
+
+bytes must be a power of 2.
+
+See also: <DS (define)>
+
+---[ ASSERT ]------------------------------------------------------------------
+
+Pseudo operations
+
+ASSERT
+
+Confirm an expression evaluates to true:
+
+  ASSERT expr
+
+Evaluates the <expression> expr - if it results in a false value an Assertion
+false error is raised and assembly stopped.
+
+See also: <IF ... ELSE ... ENDIF>
+
+---[ BANK ]--------------------------------------------------------------------
+
+Pseudo operations
+
+BANK
+
+Set the target bank and offset for assembler output:
+
+ BANK bank[,[offset]][,[clear]]
+
+Assembles code to bank number bank at the optional address offset from the
+beginning - if omitted, assembly will start at offset 0.
+
+If clear is set to true, the bank's 16KByte of memory will be cleared first.
+
+Code assembled in this way can be run from NextBASIC using the BANK ... USR
+function:
+
+  val = BANK bank USR offset
+
+Note that this function will page in the bank at address 49152 ($c000), which is
+the same as the default value for <ORG>.
+
+If using <LET> to return addresses into NextBASIC integer variables, care should
+be taken to adjust for offsets addressing, when using the BANK operation.
+
+See also: <ORG>, <OUTPUT>
+
+---[ BRK ]---------------------------------------------------------------------
+
+Pseudo operations
+
+BRK
+
+Insert a CSpect BREAK instruction:
+
+ BRK
+
+This will trigger the CSpect emulator to break into the debugger.
+
+See also: <ASSERT>, <NBRK>
+
+---[ DX ]----------------------------------------------------------------------
+
+Pseudo operations
+
+Dx (define)
+
+Define a block of data:
+
+ DB b1|s1[,s2|b2[,...]]
+ DC s1[,s2[,...]]
+ DS n
+ DW w1[,w2[,...]]
+ DZ s1[,s2[,...]]
+
+The Dx pseudo operations allow data to be inserted into the code.
+
+DB - Define Byte(s)
+
+When given an integer, a byte of that value will be inserted into the generated
+code.  If a string is provided, the character codes for the bytes in the string
+will be inserted directly; no terminating character or mark will be added.
+
+A list of values can be supplied to store multiple bytes.  Integers and strings
+can be mixed in a single statement.
+
+DC - Define Character(s)
+
+Similar to DB but only accepting string arguments.  The final character in each
+string will have the high bit set (+128/$80).
+
+DS - Define Space
+
+Defines a block of n bytes, initialised to 0.
+
+DW - Define Word(s)
+
+Defines a list of 16-bit words, little endian (least significant byte first).
+
+DZ - Define Zero-terminated String(s)
+
+This is similar to DB and DC, except that each string will be terminated by a 0
+byte.
+
+See also: <ALIGN>
+
+---[ DISPLAY ]-----------------------------------------------------------------
+
+Pseudo operations
+
+DISPLAY
+
+Display information during the assembly process:
+
+ DISPLAY {str|expr|/D|/H|/B|/C[,...]}
+
+Displays strings and/or the result of numeric <expressions> during the assembly
+process.
+
+The format for displaying numbers can be altered with switches:
+
+ Switch   Format
+ ------   -------------------------------------------------------------------
+ /D       Decimal mode (default).
+ /H       Hexadecimal mode - 2 digits for <=255/$ff, 4 digits for >=256/$100.
+ /B       Binary mode - 8 bits for <=255/$ff, 16 bits for >=256/$100.
+ /C       Character mode - uses the least significant byte as an ASCII value.
+
+When the format is changed, it will stay in effect until altered again.
+
+---[ EQU ]---------------------------------------------------------------------
+
+Pseudo operations
+
+EQU
+
+Define a constant:
+
+ name EQU expr
+
+Defines the constant name to the numeric value of the result of evaluating the
+<expression> expr.
+
+See also: <LET>
+
+---[ IF ]----------------------------------------------------------------------
+
+Pseudo operations
+
+IF ... ELSE ... ENDIF
+
+Assemble a block of code conditionally:
+
+ IF condition
+  ...
+ [ELSE
+  ...]
+ ENDIF
+
+If the result of evaluating the <expression> condition is true, the block of
+code following the IF statement is assembled, otherwise the block of code
+following ELSE is assembled, if present.
+
+Conditional code blocks can be nested up to 7 levels deep.
+
+See also: <ASSERT>
+
+---[ INCLUDE ]-----------------------------------------------------------------
+
+Pseudo operations
+
+INCLUDE
+
+Include code from a separate file:
+
+ INCLUDE "filename"
+
+Includes the code from the file filename in the assembly.  INCLUDE can nest up
+to 8 levels deep, with no strict limit on the number of files that can be
+included.
+
+The included files are stored as plain text, without line numbers, or leading
+semicolons but, otherwise, must be in a format supported by the assembler in a
+NextBASIC program.
+
+See also: <OUTPUT>
+
+---[ LET ]---------------------------------------------------------------------
+
+Pseudo operations
+
+LET
+
+Assign a value to a NextBASIC integer variable:
+
+ LET var=expr
+
+Assigns the result of evaluating numeric <expression> expr to the variable var.
+var must be a NextBASIC integer variable (one with a leading '%' character).
+
+This function is useful to return the location of addresses in the assembled
+code, to be used by the surrounding program.
+
+Address considerations when using BANK
+
+When assembling directly into banked memory, using the <BANK> pseudo operation,
+returned addresses will need to be adjusted, if using offset instructions in
+NextBASIC.
+
+For example, the first address in a banked block will be 49152 (the address the
+code will be paged in at, when run).  If, however, an instruction such as BANK
+bank USR offset is used to execute code, 49152 will need to be subtracted from
+the address returned with LET.
+
+See also: <EQU>
+
+---[ NBRK ]--------------------------------------------------------------------
+
+Pseudo operations
+
+NBRK
+
+Insert a hardware breakpoint:
+
+ NBRK
+
+This will trigger the NextZXOS debugger, equivalent to the assembly instruction
+NEXTREG 2,8 (or REG 2,8 in NextBASIC).
+
+See also: <ASSERT>, <BRK>
+
+---[ ORG ]---------------------------------------------------------------------
+
+Pseudo operations
+
+ORG
+
+Set the address at that point in assembly:
+
+ ORG addr
+
+The behaviour of ORG depends on the target specified for assembled code,
+controlled by the <BANK> and <OUTPUT> pseudo operations.
+
+The default is to assemble to address 49152 ($c000).
+
+Main memory
+
+If neither BANK nor OUTPUT have been specified, ORG assembles code to main
+memory at addr.
+
+To avoid corrupting memory used by NextBASIC, the CLEAR command should be used
+with a value lower than addr, to protect the memory above it.
+
+Banked memory
+
+If the BANK pseudo operation has been specified, code is assembled to the bank
+and offset specified with that operation; ORG will, however, set the base
+address used to calculate labels to addr.
+
+Output to a file
+
+If the OUTPUT pseudo operation has been used, code will be written to the
+specified file, but the base address used for calculating labels will be set to
+addr.
+
+---[ OUTPUT ]------------------------------------------------------------------
+
+Pseudo operations
+
+OUTPUT
+
+Write assembled code to a file:
+
+ OUTPUT "filename"
+
+Directs the assembler to write the generated machine code directly to a file
+specified by filename.
+
+See also: <BANK>, <INCLUDE>, <ORG>, <SAVENEX>
+
+---[ RELOC ]-------------------------------------------------------------------
+
+Pseudo operations
+
+RELOC_x (relocation table)
+
+Generate relocation information for NextZXOS drivers:
+
+ RELOC_COUNT
+ RELOC_END
+ RELOC_START
+ RELOC_TABLE
+
+A block of code can be marked with RELOC_START and RELOC_END to track
+relocations.
+
+RELOC_COUNT will return the number of relocations in tracked code in a tracked
+block.
+
+RELOC_TABLE will emit the relocation block.  The table is a raw dump of the high
+byte of every address that will need to be patched to relocate the code.  The
+format of this table is specifically designed to support the creation of
+NextZXOS drivers.
+
+---[ SAVENEX ]-----------------------------------------------------------------
+
+Pseudo operations
+
+SAVENEX
+
+Generate a ".nex" file from the assembled code:
+
+ SAVENEX "filename",start-addr,stack-addr[,required-ram[,entry-bank]]
+
+The SAVENEX pseudo operation should be used after code has been assembled to
+write out ...
+
+TODO
+
+start-addr is start of block to save; end is PC ($)?
+
+stack-addr is top of stack, so ample space below this address must be reserved
+by the code with <DS>.
+
+required-ram?
+
+entry-bank?
+
+See also: <OUTPUT>
+
+---[ VAR ]---------------------------------------------------------------------
+
+Pseudo operations
+
+VAR
+
+Declares a named value to be variable between passes:
+
+ VAR expr
+
+When assembling code with <expressions> that vary between passes (typically by
+using a label which occurs later in the code), the assembler will abort with a
+Value changed error.  The VAR pseudo operation will avoid this.
+
+Typically VAR will be used with an expr of '$' (for the current address).
+
+Once a value is declared as a variable with VAR, that property will propagate
+through to all places where it is used (e.g. if the value is used in an <EQU>
+calculation, this will be variable).
+
+---[ INDEX ]-------------------------------------------------------------------
+
+.asm inline assembler
+
+Index
+
+ <ALIGN>
+ <ASSERT>
+ <BANK>
+ <BRK>
+ <DB>
+ <DC>
+ <DS>
+ <DW>
+ <DZ>
+ <DISPLAY>
+ ELSE                     <IF ... ELSE ... ENDIF>
+ ENDIF                    <IF ... ELSE ... ENDIF>
+ <EQU>
+ <Expressions>
+ <IF ... ELSE ... ENDIF>
+ <INCLUDE>
+ <Labels>
+ <LET>
+ <NBRK>
+ <ORG>
+ <OUTPUT>
+ <Pseudo operations>
+ RELOC_COUNT              <RELOC_x (relocation table)>
+ RELOC_END                <RELOC_x (relocation table)>
+ RELOC_START              <RELOC_x (relocation table)>
+ RELOC_TABLE              <RELOC_x (relocation table)>
+ <SAVENEX>
+ <Starting .asm>
+ <VAR>
