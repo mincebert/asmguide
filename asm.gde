@@ -6,7 +6,7 @@
 @index INDEX
 @-------------------------------------------------------------------------------
 @node MAIN
-@next RUNNING
+@next RUN
 @toc MAIN
 @{r}.asm inline assembler
 @{c}@{h1}Contents
@@ -14,7 +14,7 @@
 @{b}.asm@{ub} is an assembler which can assemble code embedded in a NextBASIC program, or
 from a source text file.
 
-@{" Running .asm " LINK RUNNING}
+@{" Running .asm " LINK RUN}
 
 @{" Program format " LINK FORMAT}
 @{" Labels " LINK LABELS}
@@ -30,7 +30,7 @@ Full documentation:
 
 .asm NextBASIC inline assembler is Copyright @( Chris Taylor.
 @-------------------------------------------------------------------------------
-@node RUNNING
+@node RUN
 @prev MAIN
 @next FORMAT
 @toc MAIN
@@ -87,7 +87,7 @@ will stop at the end of the file.
 See also: @{" INCLUDE " LINK INCLUDE}, @{" OUTPUT " LINK OUTPUT}, @{" Program format " LINK FORMAT}
 @-------------------------------------------------------------------------------
 @node FORMAT
-@prev RUNNING
+@prev RUN
 @next LABELS
 @toc MAIN
 @{r}.asm inline assembler
@@ -99,7 +99,7 @@ Lines of assembly in NextBASIC programs using @{b}.asm@{ub} have the form:
  @{i}line-number@{ui} @{b};@{ub}[@{i}label@{ui}[@{b}:@{ub}]][ @{i}operation@{ui}]
 
 The '@{b};@{ub}' character is part of NextBASIC itself and indicates a comment (same as
-@{b}REM@{ub}), so NextBASIC itself won't try and execute the line (see @{" running .asm " LINK RUNNING}).
+@{b}REM@{ub}), so NextBASIC itself won't try and execute the line (see @{" running .asm " LINK RUN}).
 
 If a @{" label " LINK LABELS} is specified on a line, it must appear at the beginning, without
 any leading spaces between '@{b};@{ub}' and it.  It can optionally be followed by a
@@ -112,7 +112,7 @@ leading spaces, to indicate it is not a label.
 Assembly instructions can be in lower or upper case.
 
 When assembly is read from a plain text file by running @{b}.asm@{ub} from the
-@{" command line " LINK RUNNING}, or using the @{" INCLUDE " LINK INCLUDE} pseudo operation, the @{i}line-number@{ui} and '@{b};@{ub}'
+@{" command line " LINK RUN}, or using the @{" INCLUDE " LINK INCLUDE} pseudo operation, the @{i}line-number@{ui} and '@{b};@{ub}'
 are omitted.
 @-------------------------------------------------------------------------------
 @node LABELS
@@ -481,7 +481,7 @@ The included files are stored as plain text, without line numbers, or leading
 semicolons but, otherwise, must be in a format supported by the assembler in a
 NextBASIC program.
 
-See also: @{" OUTPUT " LINK OUTPUT}, @{" Program format " LINK FORMAT}, @{" Running .asm " LINK RUNNING}
+See also: @{" OUTPUT " LINK OUTPUT}, @{" Program format " LINK FORMAT}, @{" Running .asm " LINK RUN}
 @-------------------------------------------------------------------------------
 @node LET
 @prev INCLUDE
@@ -695,6 +695,6 @@ calculation, this will be variable).
   @{b}RELOC_END@{ub}               @{" RELOC_x (relocation table) " LINK RELOC}
   @{b}RELOC_START@{ub}             @{" RELOC_x (relocation table) " LINK RELOC}
   @{b}RELOC_TABLE@{ub}             @{" RELOC_x (relocation table) " LINK RELOC}
- @{" Running .asm " LINK RUNNING}
+ @{" Running .asm " LINK RUN}
  @{" SAVENEX " LINK SAVENEX}
  @{" VAR " LINK VAR}
