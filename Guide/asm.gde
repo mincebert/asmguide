@@ -91,11 +91,13 @@ See also: @{" INCLUDE " LINK INCLUDE}, @{" OUTPUT " LINK OUTPUT}, @{" Program fo
 @toc MAIN
 @{r}Running .asm
 
-@{h2}Running .asm from the command line
+@{c}@{h1}Running .asm from the command line
 
 In addition to @{" assembling code embedded in NextBASIC programs " LINK RUN_BASIC}, @{b}.asm@{ub} can also
 be run directly from the command line (including in immediate mode in NextBASIC
 - a command entered without a line number).
+
+ @{b}.asm@{ub} @{i}file@{ui}
 
 In this situation, the program to be assembled is provided in a file and the
 name of that file supplied as an argument on the command line.

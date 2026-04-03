@@ -84,6 +84,8 @@ In addition to <assembling code embedded in NextBASIC programs>, .asm can also
 be run directly from the command line (including in immediate mode in NextBASIC
 - a command entered without a line number).
 
+ .asm file
+
 In this situation, the program to be assembled is provided in a file and the
 name of that file supplied as an argument on the command line.
 
