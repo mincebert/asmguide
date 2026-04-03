@@ -13,14 +13,16 @@
 @{b}.asm@{ub} is an assembler which can assemble code embedded in a NextBASIC
 program, or from a source text file.
 
-@{" Running .asm " LINK RUN}
+ @{" Running .asm " LINK RUN}
+ * @{" from within NextBASIC " LINK RUN_BASIC}
+ * @{" from the command line " LINK RUN_CMDLINE}
 
-@{" Program format " LINK FORMAT}
-@{" Labels " LINK LABELS}
-@{" Expressions " LINK EXPRESSIONS}
-@{" Pseudo operations " LINK PSEUDO_OPS}
+ @{" Program format " LINK FORMAT}
+ @{" Labels " LINK LABELS}
+ @{" Expressions " LINK EXPRESSIONS}
+ @{" Pseudo operations " LINK PSEUDO_OPS}
 
-@{" Index " LINK INDEX}
+ @{" Index " LINK INDEX}
 
 Website: @{i}https://taylorza.itch.io/nextbasic-inline-assembler@{ui}
 
@@ -36,12 +38,16 @@ Full documentation:
 
 There are two main ways to run @{b}.asm@{ub}:
 
- * from within a NextBASIC program, or
- * from the command line.
+ * @{" from within a NextBASIC program " LINK RUN_BASIC}, or
+ * @{" from the command line " LINK RUN_CMDLINE}.
+@----------------------------------------------------------------------------
+@node RUN_BASIC
+@{r}Running .asm
 
-@{h2}From within a NextBASIC program
+@{c}@{h1}Running .asm from within a NextBASIC program
 
-Here, @{b}.asm@{ub} is run from inside a program as a command, for example:
+To assemble code embedded in a NextBASIC program, @{b}.asm@{ub} is used as a
+command, for example:
 
   10 SAVE "asmprint.bas" : REM Just in case things go wrong
   20 CLEAR $bfff : REM Move RAMTOP so we have some space for our code
@@ -70,8 +76,19 @@ When used in this mode, the @{" LET " LINK LET}
 @{" pseudo operation " LINK PSEUDO_OPS} is useful to feed addresses from the
 assembled code back into the containing program.
 
-@{h2}From the command line
+@{b}.asm@{ub} can also assemble files directly, when run from the
+@{" command line " LINK RUN_CMDLINE}.
 
+See also: @{" INCLUDE " LINK INCLUDE},
+@{" OUTPUT " LINK OUTPUT}, @{" Program format " LINK FORMAT}
+@----------------------------------------------------------------------------
+@node RUN_CMDLINE
+@{r}Running .asm
+
+@{h2}Running .asm from the command line
+
+In addition to
+@{" assembling code embedded in NextBASIC programs " LINK RUN_BASIC},
 @{b}.asm@{ub} can also be run directly from the command line (including in
 immediate mode in NextBASIC - a command entered without a line number).
 
@@ -90,13 +107,14 @@ See also: @{" INCLUDE " LINK INCLUDE},
 
 @{c}@{h1}Program format
 
-Lines of assembly in NextBASIC programs using @{b}.asm@{ub} have the form:
+Lines of assembly embedded within NextBASIC programs using @{b}.asm@{ub} have
+the form:
 
  @{i}line-number@{ui} @{b};@{ub}[@{i}label@{ui}[@{b}:@{ub}]][ @{i}operation@{ui}]
 
 The '@{b};@{ub}' character is part of NextBASIC itself and indicates a comment
 (same as @{b}REM@{ub}), so NextBASIC itself won't try and execute the line
-(see @{" running .asm " LINK RUN}).
+(see @{" running .asm from within NextBASIC " LINK RUN_BASIC}).
 
 If a @{" label " LINK LABELS} is specified on a line, it must appear at the
 beginning, without any leading spaces between '@{b};@{ub}' and it.  It can
@@ -109,7 +127,7 @@ there must be one or more leading spaces, to indicate it is not a label.
 Assembly instructions can be in lower or upper case.
 
 When assembly is read from a plain text file by running @{b}.asm@{ub} from the
-@{" command line " LINK RUN}, or using the @{" INCLUDE " LINK INCLUDE}
+@{" command line " LINK RUN_CMDLINE}, or using the @{" INCLUDE " LINK INCLUDE}
 pseudo operation, the @{i}line-number@{ui} and '@{b};@{ub}' are omitted.
 @----------------------------------------------------------------------------
 @node LABELS
@@ -626,6 +644,7 @@ an @{" EQU " LINK EQU} calculation, this will be variable).
  @{" ASSERT " LINK ASSERT}
  @{" BANK " LINK BANK}
  @{" BRK " LINK BRK}
+ @{" Command line (running from) " LINK RUN_CMDLINE}
  @{" DB " LINK DX}
  @{" DC " LINK DX}
  @{" DS " LINK DX}
@@ -641,6 +660,7 @@ an @{" EQU " LINK EQU} calculation, this will be variable).
  @{" Labels " LINK LABELS}
  @{" LET " LINK LET}
  @{" NBRK " LINK NBRK}
+ @{" NextBASIC (running from) " LINK RUN_BASIC}
  @{" ORG " LINK ORG}
  @{" OUTPUT " LINK OUTPUT}
  @{" Program format " LINK FORMAT}

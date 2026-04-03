@@ -7,14 +7,16 @@ Contents
 .asm is an assembler which can assemble code embedded in a NextBASIC program, or
 from a source text file.
 
-<Running .asm>
+ <Running .asm>
+ * <from within NextBASIC>
+ * <from the command line>
 
-<Program format>
-<Labels>
-<Expressions>
-<Pseudo operations>
+ <Program format>
+ <Labels>
+ <Expressions>
+ <Pseudo operations>
 
-<Index>
+ <Index>
 
 Website: https://taylorza.itch.io/nextbasic-inline-assembler
 
@@ -31,12 +33,17 @@ Running .asm
 
 There are two main ways to run .asm:
 
- * from within a NextBASIC program, or
- * from the command line.
+ * <from within a NextBASIC program>, or
+ * <from the command line>.
 
-From within a NextBASIC program
+---[ RUN_BASIC ]---------------------------------------------------------------
 
-Here, .asm is run from inside a program as a command, for example:
+Running .asm
+
+Running .asm from within a NextBASIC program
+
+To assemble code embedded in a NextBASIC program, .asm is used as a command, for
+example:
 
   10 SAVE "asmprint.bas" : REM Just in case things go wrong
   20 CLEAR $bfff : REM Move RAMTOP so we have some space for our code
@@ -63,10 +70,19 @@ comment in a NextBASIC program (the same as REM) so would otherwise be ignored.
 When used in this mode, the <LET> <pseudo operation> is useful to feed addresses
 from the assembled code back into the containing program.
 
-From the command line
+.asm can also assemble files directly, when run from the <command line>.
 
-.asm can also be run directly from the command line (including in immediate mode
-in NextBASIC - a command entered without a line number).
+See also: <INCLUDE>, <OUTPUT>, <Program format>
+
+---[ RUN_CMDLINE ]-------------------------------------------------------------
+
+Running .asm
+
+Running .asm from the command line
+
+In addition to <assembling code embedded in NextBASIC programs>, .asm can also
+be run directly from the command line (including in immediate mode in NextBASIC
+- a command entered without a line number).
 
 In this situation, the program to be assembled is provided in a file and the
 name of that file supplied as an argument on the command line.
@@ -83,12 +99,13 @@ See also: <INCLUDE>, <OUTPUT>, <Program format>
 
 Program format
 
-Lines of assembly in NextBASIC programs using .asm have the form:
+Lines of assembly embedded within NextBASIC programs using .asm have the form:
 
  line-number ;[label[:]][ operation]
 
 The ';' character is part of NextBASIC itself and indicates a comment (same as
-REM), so NextBASIC itself won't try and execute the line (see <running .asm>).
+REM), so NextBASIC itself won't try and execute the line (see
+<running .asm from within NextBASIC>).
 
 If a <label> is specified on a line, it must appear at the beginning, without
 any leading spaces between ';' and it.  It can optionally be followed by a
@@ -622,6 +639,7 @@ Index
  <ASSERT>
  <BANK>
  <BRK>
+ <Command line (running from)>
  <DB>
  <DC>
  <DS>
@@ -637,6 +655,7 @@ Index
  <Labels>
  <LET>
  <NBRK>
+ <NextBASIC (running from)>
  <ORG>
  <OUTPUT>
  <Program format>
