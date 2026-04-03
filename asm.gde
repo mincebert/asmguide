@@ -84,7 +84,7 @@ The file must be in plain text, consisting of just the assembly lanugage code
 (and any labels or pseudo operations), without BASIC line numbers.  Assembly
 will stop at the end of the file.
 
-See also: @{" OUTPUT " LINK OUTPUT}
+See also: @{" INCLUDE " LINK INCLUDE}, @{" OUTPUT " LINK OUTPUT}, @{" Program format " LINK FORMAT}
 @-------------------------------------------------------------------------------
 @node FORMAT
 @prev STARTING
@@ -112,7 +112,7 @@ leading spaces, to indicate it is not a label.
 Assembly instructions can be in lower or upper case.
 
 When assembly is read from a plain text file by running @{b}.asm@{ub} from the
-@{" command line " LINK STARTING}, or using the @{" INCLUDE " LINK INCLUDE} pseudo operation, the @{i}line-number@{ub} and '@{b};@{ub}'
+@{" command line " LINK STARTING}, or using the @{" INCLUDE " LINK INCLUDE} pseudo operation, the @{i}line-number@{ui} and '@{b};@{ub}'
 are omitted.
 @-------------------------------------------------------------------------------
 @node LABELS
@@ -481,7 +481,7 @@ The included files are stored as plain text, without line numbers, or leading
 semicolons but, otherwise, must be in a format supported by the assembler in a
 NextBASIC program.
 
-See also: @{" OUTPUT " LINK OUTPUT}
+See also: @{" OUTPUT " LINK OUTPUT}, @{" Program format " LINK FORMAT}, @{" Starting .asm " LINK STARTING}
 @-------------------------------------------------------------------------------
 @node LET
 @prev INCLUDE
