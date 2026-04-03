@@ -13,7 +13,7 @@
 @{b}.asm@{ub} is an assembler which can assemble code embedded in a NextBASIC
 program, or from a source text file.
 
-@{" Starting .asm " LINK STARTING}
+@{" Running .asm " LINK RUNNING}
 
 @{" Program format " LINK FORMAT}
 @{" Labels " LINK LABELS}
@@ -29,10 +29,10 @@ Full documentation:
 
 .asm NextBASIC inline assembler is Copyright @( Chris Taylor.
 @----------------------------------------------------------------------------
-@node STARTING
+@node RUNNING
 @{r}.asm inline assembler
 
-@{c}@{h1}Starting .asm
+@{c}@{h1}Running .asm
 
 There are two main ways to run @{b}.asm@{ub}:
 
@@ -96,7 +96,7 @@ Lines of assembly in NextBASIC programs using @{b}.asm@{ub} have the form:
 
 The '@{b};@{ub}' character is part of NextBASIC itself and indicates a comment
 (same as @{b}REM@{ub}), so NextBASIC itself won't try and execute the line
-(see @{" starting .asm " LINK STARTING}).
+(see @{" running .asm " LINK RUNNING}).
 
 If a @{" label " LINK LABELS} is specified on a line, it must appear at the
 beginning, without any leading spaces between '@{b};@{ub}' and it.  It can
@@ -109,7 +109,7 @@ there must be one or more leading spaces, to indicate it is not a label.
 Assembly instructions can be in lower or upper case.
 
 When assembly is read from a plain text file by running @{b}.asm@{ub} from the
-@{" command line " LINK STARTING}, or using the @{" INCLUDE " LINK INCLUDE}
+@{" command line " LINK RUNNING}, or using the @{" INCLUDE " LINK INCLUDE}
 pseudo operation, the @{i}line-number@{ui} and '@{b};@{ub}' are omitted.
 @----------------------------------------------------------------------------
 @node LABELS
@@ -452,7 +452,7 @@ semicolons but, otherwise, must be in a format supported by the assembler in a
 NextBASIC program.
 
 See also: @{" OUTPUT " LINK OUTPUT},
-@{" Program format " LINK FORMAT}, @{" Starting .asm " LINK STARTING}
+@{" Program format " LINK FORMAT}, @{" Running .asm " LINK RUNNING}
 @----------------------------------------------------------------------------
 @node LET
 @{r}Pseudo operations
@@ -649,6 +649,6 @@ an @{" EQU " LINK EQU} calculation, this will be variable).
   @{b}RELOC_END@{ub}               @{" RELOC_x (relocation table) " LINK RELOC}
   @{b}RELOC_START@{ub}             @{" RELOC_x (relocation table) " LINK RELOC}
   @{b}RELOC_TABLE@{ub}             @{" RELOC_x (relocation table) " LINK RELOC}
+ @{" Running .asm " LINK RUNNING}
  @{" SAVENEX " LINK SAVENEX}
- @{" Starting .asm " LINK STARTING}
  @{" VAR " LINK VAR}

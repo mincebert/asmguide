@@ -7,7 +7,7 @@ Contents
 .asm is an assembler which can assemble code embedded in a NextBASIC program, or
 from a source text file.
 
-<Starting .asm>
+<Running .asm>
 
 <Program format>
 <Labels>
@@ -23,11 +23,11 @@ https://github.com/taylorza/zxn-inlineasm-doc/blob/main/README.md
 
 .asm NextBASIC inline assembler is Copyright © Chris Taylor.
 
----[ STARTING ]----------------------------------------------------------------
+---[ RUNNING ]-----------------------------------------------------------------
 
 .asm inline assembler
 
-Starting .asm
+Running .asm
 
 There are two main ways to run .asm:
 
@@ -88,7 +88,7 @@ Lines of assembly in NextBASIC programs using .asm have the form:
  line-number ;[label[:]][ operation]
 
 The ';' character is part of NextBASIC itself and indicates a comment (same as
-REM), so NextBASIC itself won't try and execute the line (see <starting .asm>).
+REM), so NextBASIC itself won't try and execute the line (see <running .asm>).
 
 If a <label> is specified on a line, it must appear at the beginning, without
 any leading spaces between ';' and it.  It can optionally be followed by a
@@ -446,7 +446,7 @@ The included files are stored as plain text, without line numbers, or leading
 semicolons but, otherwise, must be in a format supported by the assembler in a
 NextBASIC program.
 
-See also: <OUTPUT>, <Program format>, <Starting .asm>
+See also: <OUTPUT>, <Program format>, <Running .asm>
 
 ---[ LET ]---------------------------------------------------------------------
 
@@ -645,6 +645,6 @@ Index
   RELOC_END               <RELOC_x (relocation table)>
   RELOC_START             <RELOC_x (relocation table)>
   RELOC_TABLE             <RELOC_x (relocation table)>
+ <Running .asm>
  <SAVENEX>
- <Starting .asm>
  <VAR>
