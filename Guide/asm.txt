@@ -23,7 +23,7 @@ https://github.com/taylorza/zxn-inlineasm-doc/blob/main/README.md
 
 .asm NextBASIC inline assembler is Copyright © Chris Taylor.
 
----[ RUNNING ]-----------------------------------------------------------------
+---[ RUN ]---------------------------------------------------------------------
 
 .asm inline assembler
 
