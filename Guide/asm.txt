@@ -2,6 +2,7 @@
 ---[ MAIN ]--------------------------------------------------------------------
 
 .asm inline assembler
+
 Contents
 
 .asm is an assembler which can assemble code embedded in a NextBASIC program, or
