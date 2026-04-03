@@ -21,6 +21,13 @@ program, or from a source text file.
 @{" Pseudo operations " LINK PSEUDO_OPS}
 
 @{" Index " LINK INDEX}
+
+Website: @{i}https://taylorza.itch.io/nextbasic-inline-assembler@{ui}
+
+Full documentation:
+@{i}https://github.com/taylorza/zxn-inlineasm-doc/blob/main/README.md@{ui}
+
+.asm NextBASIC inline assembler is Copyright @( Chris Taylor.
 @----------------------------------------------------------------------------
 @node STARTING
 @{r}.asm inline assembler
@@ -254,13 +261,13 @@ See also: @{" DS (define) " LINK DX}
 
 @{c}@{h1}ASSERT
 
-Confirm an expression evaluates to true:
+Abort assemly if an expression evaluates to false:
 
   @{b}ASSERT@{ub} @{i}expr@{ui}
 
 Evaluates the @{" expression " LINK EXPRESSIONS} @{i}expr@{ui} - if it results
-in a false value an @{i}Assertion false@{ui} error is raised and assembly
-stopped.
+in a false (zero) value an @{i}Assertion false@{ui} error is raised and
+assembly stopped.
 
 See also: @{" IF ... ELSE ... ENDIF " LINK IF}
 @----------------------------------------------------------------------------
@@ -277,8 +284,8 @@ Assembles code to bank number @{i}bank@{ui} at the optional address
 @{i}offset@{ui} from the beginning - if omitted, assembly will start at offset
 0.
 
-If @{i}clear@{ui} is set to true, the bank's 16KByte of memory will be cleared
-first.
+If @{i}clear@{ui} is set to true (a non-zero value), the bank's 16KByte of
+memory will be cleared first.
 
 Code assembled in this way can be run from NextBASIC using the @{b}BANK@{ub}
 ... @{b}USR@{ub} function:
@@ -403,11 +410,14 @@ Assemble a block of code conditionally:
  @{b}ENDIF@{ub}
 
 If the result of evaluating the @{" expression " LINK EXPRESSIONS}
-@{i}condition@{ui} is true, the block of code following the @{b}IF@{ub}
-statement is assembled, otherwise the block of code following @{b}ELSE@{ub} is
-assembled, if present.
+@{i}condition@{ui} is true (non-zero), the block of code following the
+@{b}IF@{ub} statement is assembled, otherwise the block of code following
+@{b}ELSE@{ub} is assembled, if present.
 
 Conditional code blocks can be nested up to 7 levels deep.
+
+Note that @{b}IF@{ub} is an assembly-time choice - it cannot be used to choose
+alternative code blocks at runtime.
 
 See also: @{" ASSERT " LINK ASSERT}
 @----------------------------------------------------------------------------

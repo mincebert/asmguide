@@ -16,6 +16,13 @@ from a source text file.
 
 <Index>
 
+Website: https://taylorza.itch.io/nextbasic-inline-assembler
+
+Full documentation:
+https://github.com/taylorza/zxn-inlineasm-doc/blob/main/README.md
+
+.asm NextBASIC inline assembler is Copyright © Chris Taylor.
+
 ---[ STARTING ]----------------------------------------------------------------
 
 .asm inline assembler
@@ -248,12 +255,12 @@ Pseudo operations
 
 ASSERT
 
-Confirm an expression evaluates to true:
+Abort assemly if an expression evaluates to false:
 
   ASSERT expr
 
-Evaluates the <expression> expr - if it results in a false value an Assertion
-false error is raised and assembly stopped.
+Evaluates the <expression> expr - if it results in a false (zero) value an
+Assertion false error is raised and assembly stopped.
 
 See also: <IF ... ELSE ... ENDIF>
 
@@ -270,7 +277,8 @@ Set the target bank and offset for assembler output:
 Assembles code to bank number bank at the optional address offset from the
 beginning - if omitted, assembly will start at offset 0.
 
-If clear is set to true, the bank's 16KByte of memory will be cleared first.
+If clear is set to true (a non-zero value), the bank's 16KByte of memory will be
+cleared first.
 
 Code assembled in this way can be run from NextBASIC using the BANK ... USR
 function:
@@ -283,7 +291,7 @@ the same as the default value for <ORG>.
 If using <LET> to return addresses into NextBASIC integer variables, care should
 be taken to adjust for offsets addressing, when using the BANK operation.
 
-See also: <ORG>, <OUTPUT>
+See also: <OUTPUT>
 
 ---[ BRK ]---------------------------------------------------------------------
 
@@ -397,11 +405,14 @@ Assemble a block of code conditionally:
   ...]
  ENDIF
 
-If the result of evaluating the <expression> condition is true, the block of
-code following the IF statement is assembled, otherwise the block of code
-following ELSE is assembled, if present.
+If the result of evaluating the <expression> condition is true (non-zero), the
+block of code following the IF statement is assembled, otherwise the block of
+code following ELSE is assembled, if present.
 
 Conditional code blocks can be nested up to 7 levels deep.
+
+Note that IF is an assembly-time choice - it cannot be used to choose
+alternative code blocks at runtime.
 
 See also: <ASSERT>
 
