@@ -29,7 +29,7 @@ Website: @{i}https://taylorza.itch.io/nextbasic-inline-assembler@{ui}
 Full documentation:
 @{i}https://github.com/taylorza/zxn-inlineasm-doc/blob/main/README.md@{ui}
 
-.asm NextBASIC inline assembler is Copyright @( Chris Taylor.
+@{b}.asm@{ub} NextBASIC inline assembler is Copyright @( Chris Taylor.
 @----------------------------------------------------------------------------
 @node RUN
 @{r}.asm inline assembler
