@@ -83,14 +83,26 @@ See also: <OUTPUT>
 
 Program format
 
+Lines of assembly in NextBASIC programs using .asm have the form:
+
+ line-number ;[label[:]][ operation]
+
+The ';' character is part of NextBASIC itself and indicates a comment (same as
+REM), so NextBASIC itself won't try and execute the line (see <starting .asm>).
+
 If a <label> is specified on a line, it must appear at the beginning, without
-any leading spaces.  It can optionally be followed by a trailing ':' (colon).
+any leading spaces between ';' and it.  It can optionally be followed by a
+trailing ':' (colon).
 
 Instructions or <pseudo operations> can appear after a label (with intervening
 space) or on a separate line.  If on a separate line, there must be one or more
 leading spaces, to indicate it is not a label.
 
 Assembly instructions can be in lower or upper case.
+
+When assembly is read from a plain text file by running .asm from the
+<command line>, or using the <INCLUDE> pseudo operation, the line-number and ';'
+are omitted.
 
 ---[ LABELS ]------------------------------------------------------------------
 

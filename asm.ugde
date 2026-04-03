@@ -89,15 +89,27 @@ See also: @{" OUTPUT " LINK OUTPUT}
 
 @{c}@{h1}Program format
 
+Lines of assembly in NextBASIC programs using @{b}.asm@{ub} have the form:
+
+ @{i}line-number@{ui} @{b};@{ub}[@{i}label@{ui}[@{b}:@{ub}]][ @{i}operation@{ui}]
+
+The '@{b};@{ub}' character is part of NextBASIC itself and indicates a comment
+(same as @{b}REM@{ub}), so NextBASIC itself won't try and execute the line
+(see @{" starting .asm " LINK STARTING}).
+
 If a @{" label " LINK LABELS} is specified on a line, it must appear at the
-beginning, without any leading spaces.  It can optionally be followed by a
-trailing '@{b}:@{ub}' (colon).
+beginning, without any leading spaces between '@{b};@{ub}' and it.  It can
+optionally be followed by a trailing '@{b}:@{ub}' (colon).
 
 Instructions or @{" pseudo operations " LINK PSEUDO_OPS} can appear after a
 label (with intervening space) or on a separate line.  If on a separate line,
 there must be one or more leading spaces, to indicate it is not a label.
 
 Assembly instructions can be in lower or upper case.
+
+When assembly is read from a plain text file by running @{b}.asm@{ub} from the
+@{" command line " LINK STARTING}, or using the @{" INCLUDE " LINK INCLUDE}
+pseudo operation, the @{i}line-number@{ui} and '@{b};@{ub}' are omitted.
 @----------------------------------------------------------------------------
 @node LABELS
 @{r}.asm inline assembler
