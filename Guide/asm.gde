@@ -50,7 +50,7 @@ There are two main ways to run @{b}.asm@{ub}:
 @prev RUN
 @next RUN_CMDLINE
 @toc MAIN
-@{r}Running .asm
+@{r}.asm inline assembler / Running .asm
 
 @{c}@{h1}Running .asm from within a NextBASIC program
 
@@ -299,7 +299,7 @@ See also: @{" EQU " LINK EQU}, @{" LET " LINK LET}, @{" VAR " LINK VAR}
 @prev PSEUDO_OPS
 @next ASSERT
 @toc PSEUDO_OPS
-@{r}Pseudo operations
+@{r}.asm inline assembler / Pseudo operations
 
 @{c}@{h1}ALIGN
 
@@ -318,7 +318,7 @@ See also: @{" DS (define) " LINK DX}
 @prev ALIGN
 @next BANK
 @toc PSEUDO_OPS
-@{r}Pseudo operations
+@{r}.asm inline assembler / Pseudo operations
 
 @{c}@{h1}ASSERT
 
@@ -335,7 +335,7 @@ See also: @{" IF ... ELSE ... ENDIF " LINK IF}
 @prev ASSERT
 @next BRK
 @toc PSEUDO_OPS
-@{r}Pseudo operations
+@{r}.asm inline assembler / Pseudo operations
 
 @{c}@{h1}BANK
 
@@ -366,7 +366,7 @@ See also: @{" OUTPUT " LINK OUTPUT}
 @prev BANK
 @next DX
 @toc PSEUDO_OPS
-@{r}Pseudo operations
+@{r}.asm inline assembler / Pseudo operations
 
 @{c}@{h1}BRK
 
@@ -382,7 +382,7 @@ See also: @{" ASSERT " LINK ASSERT}, @{" NBRK " LINK NBRK}
 @prev BRK
 @next DISPLAY
 @toc PSEUDO_OPS
-@{r}Pseudo operations
+@{r}.asm inline assembler / Pseudo operations
 
 @{c}@{h1}Dx (define)
 
@@ -429,7 +429,7 @@ See also: @{" ALIGN " LINK ALIGN}
 @prev DX
 @next EQU
 @toc PSEUDO_OPS
-@{r}Pseudo operations
+@{r}.asm inline assembler / Pseudo operations
 
 @{c}@{h1}DISPLAY
 
@@ -455,7 +455,7 @@ When the format is changed, it will stay in effect until altered again.
 @prev DISPLAY
 @next IF
 @toc PSEUDO_OPS
-@{r}Pseudo operations
+@{r}.asm inline assembler / Pseudo operations
 
 @{c}@{h1}EQU
 
@@ -472,7 +472,7 @@ See also: @{" LET " LINK LET}
 @prev EQU
 @next INCLUDE
 @toc PSEUDO_OPS
-@{r}Pseudo operations
+@{r}.asm inline assembler / Pseudo operations
 
 @{c}@{h1}IF ... ELSE ... ENDIF
 
@@ -499,7 +499,7 @@ See also: @{" ASSERT " LINK ASSERT}
 @prev IF
 @next LET
 @toc PSEUDO_OPS
-@{r}Pseudo operations
+@{r}.asm inline assembler / Pseudo operations
 
 @{c}@{h1}INCLUDE
 
@@ -521,7 +521,7 @@ See also: @{" OUTPUT " LINK OUTPUT}, @{" Program format " LINK FORMAT}, @{" Runn
 @prev INCLUDE
 @next NBRK
 @toc PSEUDO_OPS
-@{r}Pseudo operations
+@{r}.asm inline assembler / Pseudo operations
 
 @{c}@{h1}LET
 
@@ -552,7 +552,7 @@ See also: @{" EQU " LINK EQU}
 @prev LET
 @next ORG
 @toc PSEUDO_OPS
-@{r}Pseudo operations
+@{r}.asm inline assembler / Pseudo operations
 
 @{c}@{h1}NBRK
 
@@ -569,7 +569,7 @@ See also: @{" ASSERT " LINK ASSERT}, @{" BRK " LINK BRK}
 @prev NBRK
 @next OUTPUT
 @toc PSEUDO_OPS
-@{r}Pseudo operations
+@{r}.asm inline assembler / Pseudo operations
 
 @{c}@{h1}ORG
 
@@ -606,7 +606,7 @@ specified file, but the base address used for calculating labels will be set to
 @prev ORG
 @next RELOC
 @toc PSEUDO_OPS
-@{r}Pseudo operations
+@{r}.asm inline assembler / Pseudo operations
 
 @{c}@{h1}OUTPUT
 
@@ -623,7 +623,7 @@ See also: @{" BANK " LINK BANK}, @{" INCLUDE " LINK INCLUDE}, @{" ORG " LINK ORG
 @prev OUTPUT
 @next SAVENEX
 @toc PSEUDO_OPS
-@{r}Pseudo operations
+@{r}.asm inline assembler / Pseudo operations
 
 @{c}@{h1}RELOC_x (relocation table)
 
@@ -652,7 +652,7 @@ documentation.
 @prev RELOC
 @next VAR
 @toc PSEUDO_OPS
-@{r}Pseudo operations
+@{r}.asm inline assembler / Pseudo operations
 
 @{c}@{h1}SAVENEX
 
@@ -686,7 +686,7 @@ See also: @{" OUTPUT " LINK OUTPUT}
 @prev SAVENEX
 @next INDEX
 @toc PSEUDO_OPS
-@{r}Pseudo operations
+@{r}.asm inline assembler / Pseudo operations
 
 @{c}@{h1}VAR
 
