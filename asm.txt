@@ -229,6 +229,16 @@ Available operators are given in the table below, from high to low precedence:
  &&            Logical AND
  ||            Logical OR
 
+Syntax ambiguity
+
+Sometimes an expression can cause ambiguity with the intended instruction and be
+parsed incorrectly.  For example: "CP (1+2)*3" would be interpreted as an
+operation with an invalid indirect address specification, rather than a
+bracketed expression, and raise a Syntax error.
+
+This can be resolved by rewriting the expression, or using a character other
+than a bracket as the parameter to the instruction, for example: "CP 0+(1+2)*3".
+
 See also: <EQU>, <LET>, <VAR>
 
 ---[ PSEUDO_OPS ]--------------------------------------------------------------

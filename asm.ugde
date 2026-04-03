@@ -239,6 +239,17 @@ Available operators are given in the table below, from high to low precedence:
  @{b}&&@{ub}            Logical AND
  @{b}||@{ub}            Logical OR
 
+@{h2}Syntax ambiguity
+
+Sometimes an expression can cause ambiguity with the intended instruction and
+be parsed incorrectly.  For example: "@{b}CP (1+2)*3@{ub}" would be interpreted
+as an operation with an invalid indirect address specification, rather than a
+bracketed expression, and raise a @{i}Syntax error@{ui}.
+
+This can be resolved by rewriting the expression, or using a character other
+than a bracket as the parameter to the instruction, for example:
+"@{b}CP 0+(1+2)*3@{ub}".
+
 See also: @{" EQU " LINK EQU}, @{" LET " LINK LET}, @{" VAR " LINK VAR}
 @----------------------------------------------------------------------------
 @node PSEUDO_OPS
