@@ -590,6 +590,9 @@ tracked block.
 of the high byte of every address that will need to be patched to relocate the
 code.  The format of this table is specifically designed to support the
 creation of NextZXOS drivers.
+
+More information about how these operations are used is available in the full
+documentation.
 @----------------------------------------------------------------------------
 @node SAVENEX
 @{r}Pseudo operations
@@ -603,16 +606,23 @@ Generate a ".nex" file from the assembled code:
 The @{b}SAVENEX@{ub} pseudo operation should be used after code has been
 assembled to write out ...
 
-TODO
+@{i}start-addr@{ui} is address from which execution is to start (in
+@{i}entry-bank@{ui}, if present).
 
-@{i}start-addr@{ui} is start of block to save; end is PC ($)?
+@{i}stack-addr@{ui} is initial address for the stack, which will grow
+downwards, so sufficient space below this address must be reserved by the code
+with @{" DS " LINK DX}.
 
-@{i}stack-addr@{ui} is top of stack, so ample space below this address must be
-reserved by the code with @{" DS " LINK DX}.
+@{i}required-ram@{ui} specifies the amount of system RAM which must be
+available to execute the program: 0 for 768KByte (in a 1MByte Next), or 1 for
+1792KByte (in a 2MByte Next).
 
-@{i}required-ram@{ui}?
+@{i}entry-bank@{ui} is the number of the bank containing the code which is to
+be executed upon startup (as @{i}start-addr@{ui}.)
 
-@{i}entry-bank@{ui}?
+More information about how this operation is used is available in the full
+documentation.  Information about the ".nex" file format is available online
+at @{i}https://wiki.specnext.dev/NEX_file_format@{ui}.
 
 See also: @{" OUTPUT " LINK OUTPUT}
 @----------------------------------------------------------------------------

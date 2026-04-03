@@ -585,6 +585,9 @@ byte of every address that will need to be patched to relocate the code.  The
 format of this table is specifically designed to support the creation of
 NextZXOS drivers.
 
+More information about how these operations are used is available in the full
+documentation.
+
 ---[ SAVENEX ]-----------------------------------------------------------------
 
 Pseudo operations
@@ -598,16 +601,22 @@ Generate a ".nex" file from the assembled code:
 The SAVENEX pseudo operation should be used after code has been assembled to
 write out ...
 
-TODO
+start-addr is address from which execution is to start (in entry-bank, if
+present).
 
-start-addr is start of block to save; end is PC ($)?
+stack-addr is initial address for the stack, which will grow downwards, so
+sufficient space below this address must be reserved by the code with <DS>.
 
-stack-addr is top of stack, so ample space below this address must be reserved
-by the code with <DS>.
+required-ram specifies the amount of system RAM which must be available to
+execute the program: 0 for 768KByte (in a 1MByte Next), or 1 for 1792KByte (in a
+2MByte Next).
 
-required-ram?
+entry-bank is the number of the bank containing the code which is to be executed
+upon startup (as start-addr.)
 
-entry-bank?
+More information about how this operation is used is available in the full
+documentation.  Information about the ".nex" file format is available online at
+https://wiki.specnext.dev/NEX_file_format.
 
 See also: <OUTPUT>
 
