@@ -66,7 +66,7 @@ from the assembled code back into the containing program.
 
 .asm can also <assemble code from a file>.
 
-See also: <INCLUDE>, <OUTPUT>, <Program format>
+See also: <INCLUDE>, <OUTPUT>
 
 ---[ ASM_FILE ]----------------------------------------------------------------
 
@@ -103,7 +103,7 @@ Lines of assembly embedded within NextBASIC programs using .asm have the form:
 
 The ';' character is part of NextBASIC itself and indicates a comment (same as
 REM), so NextBASIC itself won't try and execute the line (see
-<assembling inline code in a NextBASIC program>).
+<inline assembly>).
 
 If a <label> is specified on a line, it must appear at the beginning, without
 any leading spaces between ';' and it.  It can optionally be followed by a
@@ -115,9 +115,9 @@ leading spaces, to indicate it is not a label.
 
 Assembly instructions can be in lower or upper case.
 
-When assembly is read from a plain text file by running .asm from the
-<command line>, or using the <INCLUDE> pseudo operation, the line-number and ';'
-are omitted.
+When assembly is read from a plain text file by running .asm with a
+<filename argument>, or using the <INCLUDE> pseudo operation, the line-number
+and ';' are omitted.
 
 ---[ LABELS ]------------------------------------------------------------------
 

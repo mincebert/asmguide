@@ -110,8 +110,8 @@ the form:
  @{i}line-number@{ui} @{b};@{ub}[@{i}label@{ui}[@{b}:@{ub}]][ @{i}operation@{ui}]
 
 The '@{b};@{ub}' character is part of NextBASIC itself and indicates a comment
-(same as @{b}REM@{ub}), so NextBASIC itself won't try and execute the line
-(see @{" assembling inline code in a NextBASIC program " LINK ASM_INLINE}).
+(same as @{b}REM@{ub}), so NextBASIC itself won't try and execute the line (see
+@{" inline assembly " LINK ASM_INLINE}).
 
 If a @{" label " LINK LABELS} is specified on a line, it must appear at the
 beginning, without any leading spaces between '@{b};@{ub}' and it.  It can
@@ -123,9 +123,10 @@ there must be one or more leading spaces, to indicate it is not a label.
 
 Assembly instructions can be in lower or upper case.
 
-When assembly is read from a plain text file by running @{b}.asm@{ub} from the
-@{" command line " LINK ASM_FILE}, or using the @{" INCLUDE " LINK INCLUDE}
-pseudo operation, the @{i}line-number@{ui} and '@{b};@{ub}' are omitted.
+When assembly is read from a plain text file by running @{b}.asm@{ub} with a
+@{" filename argument " LINK ASM_FILE}, or using the
+@{" INCLUDE " LINK INCLUDE} pseudo operation, the @{i}line-number@{ui} and
+'@{b};@{ub}' are omitted.
 @----------------------------------------------------------------------------
 @node LABELS
 @{r}.asm inline assembler
