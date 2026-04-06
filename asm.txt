@@ -557,10 +557,10 @@ Address considerations when using BANK
 When assembling directly into banked memory, returned addresses will need to be
 adjusted, if using offset instructions in NextBASIC.
 
-For example, the first address in a banked block will be 49152 (the address the
-code will be paged in at, when run).  If, however, an instruction such as BANK
-bank USR offset is used to execute code, 49152 will need to be subtracted from
-the address returned with LET.
+For example, the first address in a banked block will be 49152 ($c000) - the
+address the code will be paged in at, when run - unless overridden by <ORG>.
+If, however, an instruction such as BANK bank USR offset is used to execute
+code, 49152 will need to be subtracted from the address returned with LET.
 
 More information on this is given on the <BANK> page.
 
