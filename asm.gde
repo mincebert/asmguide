@@ -6,7 +6,7 @@
 @index INDEX
 @-------------------------------------------------------------------------------
 @node MAIN
-@next RUN
+@next RUN_BASIC
 @toc MAIN
 @{r}.asm inline assembler
 
@@ -15,9 +15,12 @@
 @{b}.asm@{ub} is an assembler which can assemble code embedded in a NextBASIC program, or
 from a source text file.
 
- @{" Running .asm " LINK RUN}
+Running .asm:
+
  * @{" from within NextBASIC " LINK RUN_BASIC}
  * @{" from the command line " LINK RUN_CMDLINE}
+
+Reference:
 
  @{" Program format " LINK FORMAT}
  @{" Labels " LINK LABELS}
@@ -33,24 +36,11 @@ Full documentation:
 
 @{b}.asm@{ub} NextBASIC inline assembler is Copyright @( Chris Taylor.
 @-------------------------------------------------------------------------------
-@node RUN
-@prev MAIN
-@next RUN_BASIC
-@toc MAIN
-@{r}.asm inline assembler
-
-@{c}@{h1}Running .asm
-
-There are two main ways to run @{b}.asm@{ub}:
-
- * @{" from within a NextBASIC program " LINK RUN_BASIC}, or
- * @{" from the command line " LINK RUN_CMDLINE}.
-@-------------------------------------------------------------------------------
 @node RUN_BASIC
-@prev RUN
+@prev MAIN
 @next RUN_CMDLINE
 @toc MAIN
-@{r}.asm inline assembler / Running .asm
+@{r}.asm inline assembler
 
 @{c}@{h1}Running .asm from within a NextBASIC program
 
@@ -90,7 +80,7 @@ See also: @{" INCLUDE " LINK INCLUDE}, @{" OUTPUT " LINK OUTPUT}, @{" Program fo
 @prev RUN_BASIC
 @next FORMAT
 @toc MAIN
-@{r}Running .asm
+@{r}.asm inline assembler
 
 @{c}@{h1}Running .asm from the command line
 
@@ -515,7 +505,7 @@ The included files are stored as plain text, without line numbers, or leading
 semicolons but, otherwise, must be in a format supported by the assembler in a
 NextBASIC program.
 
-See also: @{" OUTPUT " LINK OUTPUT}, @{" Program format " LINK FORMAT}, @{" Running .asm " LINK RUN}
+See also: @{" OUTPUT " LINK OUTPUT}, @{" Program format " LINK FORMAT}, @{" Running .asm from the command line " LINK RUN_CMDLINE}
 @-------------------------------------------------------------------------------
 @node LET
 @prev INCLUDE
@@ -740,6 +730,5 @@ calculation, this will be variable).
   @{b}RELOC_END@{ub}               @{" RELOC_x (relocation table) " LINK RELOC}
   @{b}RELOC_START@{ub}             @{" RELOC_x (relocation table) " LINK RELOC}
   @{b}RELOC_TABLE@{ub}             @{" RELOC_x (relocation table) " LINK RELOC}
- @{" Running .asm " LINK RUN}
  @{" SAVENEX " LINK SAVENEX}
  @{" VAR " LINK VAR}

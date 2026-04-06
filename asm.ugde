@@ -14,9 +14,12 @@
 @{b}.asm@{ub} is an assembler which can assemble code embedded in a NextBASIC
 program, or from a source text file.
 
- @{" Running .asm " LINK RUN}
+Running .asm:
+
  * @{" from within NextBASIC " LINK RUN_BASIC}
  * @{" from the command line " LINK RUN_CMDLINE}
+
+Reference:
 
  @{" Program format " LINK FORMAT}
  @{" Labels " LINK LABELS}
@@ -32,18 +35,8 @@ Full documentation:
 
 @{b}.asm@{ub} NextBASIC inline assembler is Copyright @( Chris Taylor.
 @----------------------------------------------------------------------------
-@node RUN
-@{r}.asm inline assembler
-
-@{c}@{h1}Running .asm
-
-There are two main ways to run @{b}.asm@{ub}:
-
- * @{" from within a NextBASIC program " LINK RUN_BASIC}, or
- * @{" from the command line " LINK RUN_CMDLINE}.
-@----------------------------------------------------------------------------
 @node RUN_BASIC
-@{r}.asm inline assembler / Running .asm
+@{r}.asm inline assembler
 
 @{c}@{h1}Running .asm from within a NextBASIC program
 
@@ -84,7 +77,7 @@ See also: @{" INCLUDE " LINK INCLUDE},
 @{" OUTPUT " LINK OUTPUT}, @{" Program format " LINK FORMAT}
 @----------------------------------------------------------------------------
 @node RUN_CMDLINE
-@{r}Running .asm
+@{r}.asm inline assembler
 
 @{c}@{h1}Running .asm from the command line
 
@@ -484,7 +477,7 @@ semicolons but, otherwise, must be in a format supported by the assembler in a
 NextBASIC program.
 
 See also: @{" OUTPUT " LINK OUTPUT},
-@{" Program format " LINK FORMAT}, @{" Running .asm " LINK RUN}
+@{" Program format " LINK FORMAT}, @{" Running .asm from the command line " LINK RUN_CMDLINE}
 @----------------------------------------------------------------------------
 @node LET
 @{r}.asm inline assembler / Pseudo operations
@@ -693,6 +686,5 @@ an @{" EQU " LINK EQU} calculation, this will be variable).
   @{b}RELOC_END@{ub}               @{" RELOC_x (relocation table) " LINK RELOC}
   @{b}RELOC_START@{ub}             @{" RELOC_x (relocation table) " LINK RELOC}
   @{b}RELOC_TABLE@{ub}             @{" RELOC_x (relocation table) " LINK RELOC}
- @{" Running .asm " LINK RUN}
  @{" SAVENEX " LINK SAVENEX}
  @{" VAR " LINK VAR}
