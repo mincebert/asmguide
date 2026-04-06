@@ -354,7 +354,7 @@ If clear is set to true (a non-zero value), the bank's 16KByte of memory will be
 cleared first.
 
 Code assembled in this way can be run from NextBASIC using the BANK ... USR
-function:
+function, e.g.:
 
  val = BANK bank USR offset
 

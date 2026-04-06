@@ -381,7 +381,7 @@ If @{i}clear@{ui} is set to true (a non-zero value), the bank's 16KByte of memor
 cleared first.
 
 Code assembled in this way can be run from NextBASIC using the @{b}BANK ... USR@{ub}
-function:
+function, e.g.:
 
  @{i}val@{ui} = @{b}BANK@{ub} @{i}bank@{ui} @{b}USR@{ub} @{i}offset@{ui}
 
@@ -393,7 +393,7 @@ bank should be freed with @{b}BANK ... CLEAR@{ub}, e.g.:
   20 .asm
   30 ; @{b}BANK@{ub} @{i}%b@{ui}
      ...
- 100 @{i}val@{ui} = @{b}BANK@{ub} @{i}%b@{ui} @{b}USR@{ub} @{i}offset@{ui}
+ 100 val = BANK %b USR offset
      ...
  200 @{b}BANK@{ub} @{i}%b@{ui} @{b}CLEAR@{ub}
 
@@ -403,17 +403,17 @@ If using @{" LET " LINK LET} to return addresses into NextBASIC integer variable
 be taken to adjust for offset addressing, when using the @{b}BANK@{ub} operation, for
 example:
 
-  10 @{b}BANK NEW@{ub} @{i}%b@{ui}
+  10 BANK NEW %b
   20 .asm
   30 ; @{b}BANK@{ub} @{i}%b@{ui}
   40 ;@{i}origin@{ui}
-  50 ; @{b}DZ@{ub} @{i}"Start of bank"@{ui}
+  50 ; DZ "Start of bank"
   50 ;@{i}exec@{ui}
   60 ; @{b}LET@{ub} @{i}%e@{ui}=@{i}exec@{ui}-@{i}origin@{ui}
      ...
- 100 @{i}val@{ui} = @{b}BANK@{ub} @{i}%b@{ui} @{b}USR@{ub} @{i}%e@{ui}
+ 100 val = @{b}BANK@{ub} @{i}%b@{ui} @{b}USR@{ub} @{i}%e@{ui}
      ...
- 200 @{b}BANK@{ub} @{i}%b@{ui} @{b}CLEAR@{ub}
+ 200 BANK %b CLEAR
 
 Here, the starting address for assembly in the bank, @{i}origin@{ui}, is subtracted from
 the address of a label, @{i}exec@{ui}, to yield the offset from the start in @{i}%e@{ui}, which
