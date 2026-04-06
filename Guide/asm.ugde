@@ -564,11 +564,11 @@ code, to be used by the surrounding program.
 When assembling directly into banked memory, returned addresses will need to be
 adjusted, if using offset instructions in NextBASIC.
 
-For example, the first address in a banked block will be 49152 (the address
-the code will be paged in at, when run).  If, however, an instruction such as
-@{b}BANK@{ub} @{i}bank@{ui} @{b}USR@{ub} @{i}offset@{ui} is used to execute
-code, 49152 will need to be subtracted from the address returned with
-@{b}LET@{ub}.
+For example, the first address in a banked block will be 49152 ($c000) - the
+address the code will be paged in at, when run - unless overridden by
+@{" ORG " LINK ORG}.  If, however, an instruction such as @{b}BANK@{ub}
+@{i}bank@{ui} @{b}USR@{ub} @{i}offset@{ui} is used to execute code, 49152 will
+need to be subtracted from the address returned with @{b}LET@{ub}.
 
 More information on this is given on the @{" BANK " LINK BANK} page.
 
