@@ -22,6 +22,7 @@ Running .asm:
 Reference:
 
  @{" Program format " LINK FORMAT}
+ @{" Target locations " LINK TARGET}
  @{" Labels " LINK LABELS}
  @{" Expressions " LINK EXPRESSIONS}
  @{" Pseudo operations " LINK PSEUDO_OPS}
@@ -131,6 +132,36 @@ When assembly is read from a plain text file by running @{b}.asm@{ub} with a
 @{" filename argument " LINK ASM_FILE}, or using the
 @{" INCLUDE " LINK INCLUDE} pseudo operation, the @{i}line-number@{ui} and
 '@{b};@{ub}' are omitted.
+@----------------------------------------------------------------------------
+@node TARGET
+@{r}.asm inline assembler
+
+@{c}@{h1}Assembly target
+
+The assembler can write the assembled code to one of three main target
+locations:
+
+ * main memory
+ * banked memory
+ * a file
+
+@{h2}Main memory target
+
+Assembling to main memory is specified using the @{" ORG " LINK ORG} pseudo
+operation.  In this mode, care must be taken to avoid overwriting memory used
+by NextBASIC.
+
+The default is to assemble to main memory at location 49152 ($c000).
+
+@{h2}Banked memory target
+
+Assembling to banked memory avoids overwriting the same memory used by
+NextBASIC.  It is specified using the @{" BANK " LINK BANK} pseudo operation.
+
+@{h2}File target
+
+Assembled code can be written directly to an output file by using the
+@{" OUTPUT " LINK OUTPUT} pseudo operation.
 @----------------------------------------------------------------------------
 @node LABELS
 @{r}.asm inline assembler

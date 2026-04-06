@@ -16,6 +16,7 @@ Running .asm:
 Reference:
 
  <Program format>
+ <Target locations>
  <Labels>
  <Expressions>
  <Pseudo operations>
@@ -122,6 +123,36 @@ Assembly instructions can be in lower or upper case.
 When assembly is read from a plain text file by running .asm with a
 <filename argument>, or using the <INCLUDE> pseudo operation, the line-number
 and ';' are omitted.
+
+---[ TARGET ]------------------------------------------------------------------
+
+.asm inline assembler
+
+Assembly target
+
+The assembler can write the assembled code to one of three main target
+locations:
+
+ * main memory
+ * banked memory
+ * a file
+
+Main memory target
+
+Assembling to main memory is specified using the <ORG> pseudo operation.  In
+this mode, care must be taken to avoid overwriting memory used by NextBASIC.
+
+The default is to assemble to main memory at location 49152 ($c000).
+
+Banked memory target
+
+Assembling to banked memory avoids overwriting the same memory used by
+NextBASIC.  It is specified using the <BANK> pseudo operation.
+
+File target
+
+Assembled code can be written directly to an output file by using the <OUTPUT>
+pseudo operation.
 
 ---[ LABELS ]------------------------------------------------------------------
 
