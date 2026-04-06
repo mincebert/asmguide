@@ -100,6 +100,10 @@ NextBASIC - entering the command without a line number), or from within a
 NextBASIC program.  Note that it is the presence of the @{i}file@{ui} argument, rather
 than being run from within a NextBASIC program, which triggers this mode.
 
+Note that, by default, assembly will take place to the same memory space that
+that the current NextBASIC program is using, so care should be taken to avoid
+corrupting that.  See @{" ORG " LINK ORG} for more information.
+
 See also: @{" INCLUDE " LINK INCLUDE}, @{" OUTPUT " LINK OUTPUT},
 @-------------------------------------------------------------------------------
 @node FORMAT
