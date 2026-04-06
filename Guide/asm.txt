@@ -10,8 +10,8 @@ from a source text file.
 
 Running .asm:
 
- * <from within NextBASIC>
- * <from the command line>
+ * <Assembling inline code in a NextBASIC program>
+ * <Assembling code from a file>
 
 Reference:
 
@@ -29,11 +29,11 @@ https://github.com/taylorza/zxn-inlineasm-doc/blob/main/README.md
 
 .asm NextBASIC inline assembler is Copyright © Chris Taylor.
 
----[ RUN_BASIC ]---------------------------------------------------------------
+---[ ASM_INLINE ]--------------------------------------------------------------
 
 .asm inline assembler
 
-Running .asm from within a NextBASIC program
+Assembling inline code in a NextBASIC program
 
 To assemble code embedded in a NextBASIC program, .asm is used as a command, for
 example:
@@ -63,15 +63,15 @@ comment in a NextBASIC program (the same as REM) so would otherwise be ignored.
 When used in this mode, the <LET> <pseudo operation> is useful to feed addresses
 from the assembled code back into the containing program.
 
-.asm can also assemble files directly, when run from the <command line>.
+.asm can also <assemble files directly>.
 
 See also: <INCLUDE>, <OUTPUT>, <Program format>
 
----[ RUN_CMDLINE ]-------------------------------------------------------------
+---[ ASM_FILE ]----------------------------------------------------------------
 
 .asm inline assembler
 
-Running .asm from the command line
+Assembling code from a file
 
 In addition to <assembling code embedded in NextBASIC programs>, .asm can also
 be run directly from the command line (including in immediate mode in NextBASIC
@@ -100,7 +100,7 @@ Lines of assembly embedded within NextBASIC programs using .asm have the form:
 
 The ';' character is part of NextBASIC itself and indicates a comment (same as
 REM), so NextBASIC itself won't try and execute the line (see
-<running .asm from within NextBASIC>).
+<assembling inline code in a NextBASIC program>).
 
 If a <label> is specified on a line, it must appear at the beginning, without
 any leading spaces between ';' and it.  It can optionally be followed by a
@@ -468,7 +468,7 @@ The included files are stored as plain text, without line numbers, or leading
 semicolons but, otherwise, must be in a format supported by the assembler in a
 NextBASIC program.
 
-See also: <OUTPUT>, <Program format>, <Running .asm from the command line>
+See also: <OUTPUT>, <Program format>, <Assembling code from a file>
 
 ---[ LET ]---------------------------------------------------------------------
 
@@ -653,7 +653,6 @@ Index
  <ASSERT>
  <BANK>
  <BRK>
- <Command line (running from)>
  <DB>
  <DC>
  <DS>
@@ -664,12 +663,13 @@ Index
   ENDIF                   <IF ... ELSE ... ENDIF>
  <EQU>
  <Expressions>
+ <File assembly>
  <IF ... ELSE ... ENDIF>
  <INCLUDE>
+ <Inline assembly>
  <Labels>
  <LET>
  <NBRK>
- <NextBASIC (running from)>
  <ORG>
  <OUTPUT>
  <Program format>
