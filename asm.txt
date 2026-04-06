@@ -381,15 +381,15 @@ example:
   30 ; BANK %b
   40 ;origin
   50 ; DZ "Start of bank"
-  50 ;start
-  60 ; LET %s=start-origin
+  50 ;exec
+  60 ; LET %e=exec-origin
      ...
- 100 val = BANK %b USR %s
+ 100 val = BANK %b USR %e
      ...
  200 BANK %b CLEAR
 
 Here, the starting address for assembly in the bank, origin, is subtracted from
-the address of a label, start, to yield the offset from the start in %s, which
+the address of a label, exec, to yield the offset from the start in %e, which
 can be passed to BANK ... USR.
 
 See also: <OUTPUT>
