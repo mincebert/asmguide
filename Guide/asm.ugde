@@ -14,7 +14,7 @@
 @{b}.asm@{ub} is an assembler which can assemble code embedded in a NextBASIC
 program, or from a source text file.
 
-Running .asm:
+Running @{b}.asm@{ub}:
 
  * @{" Assembling inline code in a NextBASIC program " LINK ASM_INLINE}
  * @{" Assembling code from a file " LINK ASM_FILE}
