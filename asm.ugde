@@ -755,4 +755,5 @@ an @{" EQU " LINK EQU} calculation, this will be variable).
   @{b}RELOC_START@{ub}             @{" RELOC_x (relocation table) " LINK RELOC}
   @{b}RELOC_TABLE@{ub}             @{" RELOC_x (relocation table) " LINK RELOC}
  @{" SAVENEX " LINK SAVENEX}
+ @{" Target locations " LINK TARGET}
  @{" VAR " LINK VAR}

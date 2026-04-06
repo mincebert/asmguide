@@ -749,4 +749,5 @@ Index
   RELOC_START             <RELOC_x (relocation table)>
   RELOC_TABLE             <RELOC_x (relocation table)>
  <SAVENEX>
+ <Target locations>
  <VAR>
