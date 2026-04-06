@@ -75,7 +75,7 @@ from the assembled code back into the containing program.
 
 @{b}.asm@{ub} can also @{" assemble code from a file " LINK ASM_FILE}.
 
-See also: @{" INCLUDE " LINK INCLUDE}, @{" OUTPUT " LINK OUTPUT}, @{" Program format " LINK FORMAT}
+See also: @{" INCLUDE " LINK INCLUDE}, @{" OUTPUT " LINK OUTPUT}
 @-------------------------------------------------------------------------------
 @node ASM_FILE
 @prev ASM_INLINE
@@ -116,7 +116,7 @@ Lines of assembly embedded within NextBASIC programs using @{b}.asm@{ub} have th
 
 The '@{b};@{ub}' character is part of NextBASIC itself and indicates a comment (same as
 @{b}REM@{ub}), so NextBASIC itself won't try and execute the line (see
-@{" assembling inline code in a NextBASIC program " LINK ASM_INLINE}).
+@{" inline assembly " LINK ASM_INLINE}).
 
 If a @{" label " LINK LABELS} is specified on a line, it must appear at the beginning, without
 any leading spaces between '@{b};@{ub}' and it.  It can optionally be followed by a
@@ -128,9 +128,9 @@ leading spaces, to indicate it is not a label.
 
 Assembly instructions can be in lower or upper case.
 
-When assembly is read from a plain text file by running @{b}.asm@{ub} from the
-@{" command line " LINK ASM_FILE}, or using the @{" INCLUDE " LINK INCLUDE} pseudo operation, the @{i}line-number@{ui} and '@{b};@{ub}'
-are omitted.
+When assembly is read from a plain text file by running @{b}.asm@{ub} with a
+@{" filename argument " LINK ASM_FILE}, or using the @{" INCLUDE " LINK INCLUDE} pseudo operation, the @{i}line-number@{ui}
+and '@{b};@{ub}' are omitted.
 @-------------------------------------------------------------------------------
 @node LABELS
 @prev FORMAT
