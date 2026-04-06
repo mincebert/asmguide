@@ -468,18 +468,18 @@ See also: @{" ASSERT " LINK ASSERT}
 
 Include code from a separate file:
 
- @{b}INCLUDE@{ub} "@{i}filename@{ui}"
+ @{b}INCLUDE@{ub} "@{i}file@{ui}"
 
-Includes the code from the file @{i}filename@{ui} in the
-assembly.  @{b}INCLUDE@{ub} can nest up to 8 levels deep, with no strict limit
-on the number of files that can be included.
+Includes the code from @{i}file@{ui} in the assembly.  @{b}INCLUDE@{ub} can
+nest up to 8 levels deep, with no strict limit on the number of files that can
+be included.
 
 The included files are stored as plain text, without line numbers, or leading
 semicolons but, otherwise, must be in a format supported by the assembler in a
-NextBASIC program.
+NextBASIC program.  See @{" program format " LINK FORMAT}.
 
-See also: @{" OUTPUT " LINK OUTPUT},
-@{" Program format " LINK FORMAT}, @{" Assembling code from a file " LINK ASM_FILE}
+See also:
+@{" OUTPUT " LINK OUTPUT}, @{" Assembling code from a file " LINK ASM_FILE}
 @----------------------------------------------------------------------------
 @node LET
 @{r}.asm inline assembler / Pseudo operations
