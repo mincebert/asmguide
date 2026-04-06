@@ -408,15 +408,15 @@ example:
   30 ; @{b}BANK@{ub} @{i}%b@{ui}
   40 ;@{i}origin@{ui}
   50 ; @{b}DZ@{ub} @{i}"Start of bank"@{ui}
-  50 ;@{i}start@{ui}
-  60 ; @{b}LET@{ub} @{i}%s@{ui}=@{i}start@{ui}-@{i}origin@{ui}
+  50 ;@{i}exec@{ui}
+  60 ; @{b}LET@{ub} @{i}%e@{ui}=@{i}exec@{ui}-@{i}origin@{ui}
      ...
- 100 @{i}val@{ui} = @{b}BANK@{ub} @{i}%b@{ui} @{b}USR@{ub} @{i}%s@{ui}
+ 100 @{i}val@{ui} = @{b}BANK@{ub} @{i}%b@{ui} @{b}USR@{ub} @{i}%e@{ui}
      ...
  200 @{b}BANK@{ub} @{i}%b@{ui} @{b}CLEAR@{ub}
 
 Here, the starting address for assembly in the bank, @{i}origin@{ui}, is subtracted from
-the address of a label, @{i}start@{ui}, to yield the offset from the start in @{i}%s@{ui}, which
+the address of a label, @{i}exec@{ui}, to yield the offset from the start in @{i}%e@{ui}, which
 can be passed to @{b}BANK ... USR@{ub}.
 
 See also: @{" OUTPUT " LINK OUTPUT}
