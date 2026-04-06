@@ -76,7 +76,7 @@ from the assembled code back into the containing program.
 
 @{b}.asm@{ub} can also @{" assemble code from a file " LINK ASM_FILE}.
 
-See also: @{" INCLUDE " LINK INCLUDE}, @{" OUTPUT " LINK OUTPUT}
+See also: @{" INCLUDE " LINK INCLUDE}, @{" Target locations " LINK TARGET}
 @-------------------------------------------------------------------------------
 @node ASM_FILE
 @prev ASM_INLINE
@@ -105,7 +105,7 @@ Note that, by default, assembly will take place to the same memory space that
 that the current NextBASIC program is using, so care should be taken to avoid
 corrupting that.  See @{" ORG " LINK ORG} for more information.
 
-See also: @{" INCLUDE " LINK INCLUDE}, @{" OUTPUT " LINK OUTPUT},
+See also: @{" INCLUDE " LINK INCLUDE}, @{" OUTPUT " LINK OUTPUT}
 @-------------------------------------------------------------------------------
 @node FORMAT
 @prev ASM_FILE

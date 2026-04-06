@@ -67,7 +67,7 @@ from the assembled code back into the containing program.
 
 .asm can also <assemble code from a file>.
 
-See also: <INCLUDE>, <OUTPUT>
+See also: <INCLUDE>, <Target locations>
 
 ---[ ASM_FILE ]----------------------------------------------------------------
 
@@ -94,7 +94,7 @@ Note that, by default, assembly will take place to the same memory space that
 that the current NextBASIC program is using, so care should be taken to avoid
 corrupting that.  See <ORG> for more information.
 
-See also: <INCLUDE>, <OUTPUT>,
+See also: <INCLUDE>, <OUTPUT>
 
 ---[ FORMAT ]------------------------------------------------------------------
 
