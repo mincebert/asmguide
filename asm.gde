@@ -374,21 +374,50 @@ Set the target bank and offset for assembler output:
  @{b}BANK@{ub} @{i}bank@{ui}[,[@{i}offset@{ui}]][,[@{i}clear@{ui}]]
 
 Assembles code to bank number @{i}bank@{ui} at the optional address @{i}offset@{ui} from the
-beginning - if omitted, assembly will start at offset 0.
+beginning - if omitted, assembly will start at offset 0 (which is paged in at
+address 49152 [$c000], by default).
 
 If @{i}clear@{ui} is set to true (a non-zero value), the bank's 16KByte of memory will be
 cleared first.
 
-Code assembled in this way can be run from NextBASIC using the @{b}BANK@{ub} ... @{b}USR@{ub}
+Code assembled in this way can be run from NextBASIC using the @{b}BANK ... USR@{ub}
 function:
 
-  @{i}val@{ui} = @{b}BANK@{ub} @{i}bank@{ui} @{b}USR@{ub} @{i}offset@{ui}
+ @{i}val@{ui} = @{b}BANK@{ub} @{i}bank@{ui} @{b}USR@{ub} @{i}offset@{ui}
 
-Note that this function will page in the bank at address 49152 ($c000), which is
-the same as the default value for @{" ORG " LINK ORG}.
+Typically, an available bank will be allocated using the @{b}BANK NEW@{ub} NextBASIC
+command and passed to the code in an integer variable.  After execution, the
+bank should be freed with @{b}BANK ... CLEAR@{ub}, e.g.:
+
+  10 @{b}BANK NEW@{ub} @{i}%b@{ui}
+  20 .asm
+  30 ; @{b}BANK@{ub} @{i}%b@{ui}
+     ...
+ 100 @{i}val@{ui} = @{b}BANK@{ub} @{i}%b@{ui} @{b}USR@{ub} @{i}offset@{ui}
+     ...
+ 200 @{b}BANK@{ub} @{i}%b@{ui} @{b}CLEAR@{ub}
+
+@{h2}Offset addressing
 
 If using @{" LET " LINK LET} to return addresses into NextBASIC integer variables, care should
-be taken to adjust for offsets addressing, when using the @{b}BANK@{ub} operation.
+be taken to adjust for offset addressing, when using the @{b}BANK@{ub} operation, for
+example:
+
+  10 @{b}BANK NEW@{ub} @{i}%b@{ui}
+  20 .asm
+  30 ; @{b}BANK@{ub} @{i}%b@{ui}
+  40 ;@{i}origin@{ui}
+  50 ; @{b}DZ@{ub} @{i}"Start of bank"@{ui}
+  50 ;@{i}start@{ui}
+  60 ; @{b}LET@{ub} @{i}%s@{ui}=@{i}start@{ui}-@{i}origin@{ui}
+     ...
+ 100 @{i}val@{ui} = @{b}BANK@{ub} @{i}%b@{ui} @{b}USR@{ub} @{i}%s@{ui}
+     ...
+ 200 @{b}BANK@{ub} @{i}%b@{ui} @{b}CLEAR@{ub}
+
+Here, the starting address for assembly in the bank, @{i}origin@{ui}, is subtracted from
+the address of a label, @{i}start@{ui}, to yield the offset from the start in @{i}%s@{ui}, which
+can be passed to @{b}BANK ... USR@{ub}.
 
 See also: @{" OUTPUT " LINK OUTPUT}
 @-------------------------------------------------------------------------------
@@ -566,14 +595,15 @@ code, to be used by the surrounding program.
 
 @{h2}Address considerations when using BANK
 
-When assembling directly into banked memory, using the @{" BANK " LINK BANK} pseudo operation,
-returned addresses will need to be adjusted, if using offset instructions in
-NextBASIC.
+When assembling directly into banked memory, returned addresses will need to be
+adjusted, if using offset instructions in NextBASIC.
 
 For example, the first address in a banked block will be 49152 (the address the
 code will be paged in at, when run).  If, however, an instruction such as @{b}BANK@{ub}
 @{i}bank@{ui} @{b}USR@{ub} @{i}offset@{ui} is used to execute code, 49152 will need to be subtracted from
 the address returned with @{b}LET@{ub}.
+
+More information on this is given on the @{" BANK " LINK BANK} page.
 
 See also: @{" EQU " LINK EQU}
 @-------------------------------------------------------------------------------

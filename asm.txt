@@ -347,7 +347,8 @@ Set the target bank and offset for assembler output:
  BANK bank[,[offset]][,[clear]]
 
 Assembles code to bank number bank at the optional address offset from the
-beginning - if omitted, assembly will start at offset 0.
+beginning - if omitted, assembly will start at offset 0 (which is paged in at
+address 49152 [$c000], by default).
 
 If clear is set to true (a non-zero value), the bank's 16KByte of memory will be
 cleared first.
@@ -355,13 +356,41 @@ cleared first.
 Code assembled in this way can be run from NextBASIC using the BANK ... USR
 function:
 
-  val = BANK bank USR offset
+ val = BANK bank USR offset
 
-Note that this function will page in the bank at address 49152 ($c000), which is
-the same as the default value for <ORG>.
+Typically, an available bank will be allocated using the BANK NEW NextBASIC
+command and passed to the code in an integer variable.  After execution, the
+bank should be freed with BANK ... CLEAR, e.g.:
+
+  10 BANK NEW %b
+  20 .asm
+  30 ; BANK %b
+     ...
+ 100 val = BANK %b USR offset
+     ...
+ 200 BANK %b CLEAR
+
+Offset addressing
 
 If using <LET> to return addresses into NextBASIC integer variables, care should
-be taken to adjust for offsets addressing, when using the BANK operation.
+be taken to adjust for offset addressing, when using the BANK operation, for
+example:
+
+  10 BANK NEW %b
+  20 .asm
+  30 ; BANK %b
+  40 ;origin
+  50 ; DZ "Start of bank"
+  50 ;start
+  60 ; LET %s=start-origin
+     ...
+ 100 val = BANK %b USR %s
+     ...
+ 200 BANK %b CLEAR
+
+Here, the starting address for assembly in the bank, origin, is subtracted from
+the address of a label, start, to yield the offset from the start in %s, which
+can be passed to BANK ... USR.
 
 See also: <OUTPUT>
 
@@ -525,14 +554,15 @@ code, to be used by the surrounding program.
 
 Address considerations when using BANK
 
-When assembling directly into banked memory, using the <BANK> pseudo operation,
-returned addresses will need to be adjusted, if using offset instructions in
-NextBASIC.
+When assembling directly into banked memory, returned addresses will need to be
+adjusted, if using offset instructions in NextBASIC.
 
 For example, the first address in a banked block will be 49152 (the address the
 code will be paged in at, when run).  If, however, an instruction such as BANK
 bank USR offset is used to execute code, 49152 will need to be subtracted from
 the address returned with LET.
+
+More information on this is given on the <BANK> page.
 
 See also: <EQU>
 
