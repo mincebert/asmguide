@@ -461,17 +461,16 @@ INCLUDE
 
 Include code from a separate file:
 
- INCLUDE "filename"
+ INCLUDE "file"
 
-Includes the code from the file filename in the assembly.  INCLUDE can nest up
-to 8 levels deep, with no strict limit on the number of files that can be
-included.
+Includes the code from file in the assembly.  INCLUDE can nest up to 8 levels
+deep, with no strict limit on the number of files that can be included.
 
 The included files are stored as plain text, without line numbers, or leading
 semicolons but, otherwise, must be in a format supported by the assembler in a
-NextBASIC program.
+NextBASIC program.  See <program format>.
 
-See also: <OUTPUT>, <Program format>, <Assembling code from a file>
+See also: <OUTPUT>, <Assembling code from a file>
 
 ---[ LET ]---------------------------------------------------------------------
 
