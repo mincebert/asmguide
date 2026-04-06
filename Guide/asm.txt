@@ -59,11 +59,12 @@ Lines of the assembly language program are marked with leading ';' (semicolon)
 characters and continue until the first line which does NOT begin with a ';' (up
 to and including line 120, above).  The semicolon character normally marks a
 comment in a NextBASIC program (the same as REM) so would otherwise be ignored.
+See <program format>.
 
 When used in this mode, the <LET> <pseudo operation> is useful to feed addresses
 from the assembled code back into the containing program.
 
-.asm can also <assemble files directly>.
+.asm can also <assemble code from a file>.
 
 See also: <INCLUDE>, <OUTPUT>, <Program format>
 
@@ -73,20 +74,22 @@ See also: <INCLUDE>, <OUTPUT>, <Program format>
 
 Assembling code from a file
 
-In addition to <assembling code embedded in NextBASIC programs>, .asm can also
-be run directly from the command line (including in immediate mode in NextBASIC
-- a command entered without a line number).
+In addition to <assembling code inline in NextBASIC programs>, .asm can also
+assemble code from a file, by providing it with the name of that file as an
+argument:
 
  .asm file
 
-In this situation, the program to be assembled is provided in a file and the
-name of that file supplied as an argument on the command line.
-
 The file must be in plain text, consisting of just the assembly lanugage code
 (and any labels or pseudo operations), without BASIC line numbers.  Assembly
-will stop at the end of the file.
+will stop at the end of the file.  See <program format>.
 
-See also: <INCLUDE>, <OUTPUT>, <Program format>
+.asm can be run manually from the command line (including immediate mode in
+NextBASIC - entering the command without a line number), or from within a
+NextBASIC program.  Note that it is the presence of the file argument, rather
+than being run from within a NextBASIC program, which triggers this mode.
+
+See also: <INCLUDE>, <OUTPUT>,
 
 ---[ FORMAT ]------------------------------------------------------------------
 

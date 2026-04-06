@@ -68,11 +68,12 @@ Lines of the assembly language program are marked with leading '@{b};@{ub}' (sem
 characters and continue until the first line which does NOT begin with a '@{b};@{ub}' (up
 to and including line 120, above).  The semicolon character normally marks a
 comment in a NextBASIC program (the same as @{b}REM@{ub}) so would otherwise be ignored.
+See @{" program format " LINK FORMAT}.
 
 When used in this mode, the @{" LET " LINK LET} @{" pseudo operation " LINK PSEUDO_OPS} is useful to feed addresses
 from the assembled code back into the containing program.
 
-@{b}.asm@{ub} can also @{" assemble files directly " LINK ASM_FILE}.
+@{b}.asm@{ub} can also @{" assemble code from a file " LINK ASM_FILE}.
 
 See also: @{" INCLUDE " LINK INCLUDE}, @{" OUTPUT " LINK OUTPUT}, @{" Program format " LINK FORMAT}
 @-------------------------------------------------------------------------------
@@ -84,20 +85,22 @@ See also: @{" INCLUDE " LINK INCLUDE}, @{" OUTPUT " LINK OUTPUT}, @{" Program fo
 
 @{c}@{h1}Assembling code from a file
 
-In addition to @{" assembling code embedded in NextBASIC programs " LINK ASM_INLINE}, @{b}.asm@{ub} can also
-be run directly from the command line (including in immediate mode in NextBASIC
-- a command entered without a line number).
+In addition to @{" assembling code inline in NextBASIC programs " LINK ASM_INLINE}, @{b}.asm@{ub} can also
+assemble code from a file, by providing it with the name of that file as an
+argument:
 
  @{b}.asm@{ub} @{i}file@{ui}
 
-In this situation, the program to be assembled is provided in a file and the
-name of that file supplied as an argument on the command line.
-
 The file must be in plain text, consisting of just the assembly lanugage code
 (and any labels or pseudo operations), without BASIC line numbers.  Assembly
-will stop at the end of the file.
+will stop at the end of the file.  See @{" program format " LINK FORMAT}.
 
-See also: @{" INCLUDE " LINK INCLUDE}, @{" OUTPUT " LINK OUTPUT}, @{" Program format " LINK FORMAT}
+@{b}.asm@{ub} can be run manually from the command line (including immediate mode in
+NextBASIC - entering the command without a line number), or from within a
+NextBASIC program.  Note that it is the presence of the @{i}file@{ui} argument, rather
+than being run from within a NextBASIC program, which triggers this mode.
+
+See also: @{" INCLUDE " LINK INCLUDE}, @{" OUTPUT " LINK OUTPUT},
 @-------------------------------------------------------------------------------
 @node FORMAT
 @prev ASM_FILE
