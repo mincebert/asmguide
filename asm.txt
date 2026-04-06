@@ -563,10 +563,13 @@ OUTPUT
 
 Write assembled code to a file:
 
- OUTPUT "filename"
+ OUTPUT "file"
 
-Directs the assembler to write the generated machine code directly to a file
-specified by filename.
+Directs the assembler to write the generated machine code to file instead of
+directly into memory.
+
+This operation only affects code assembled from the point where OUTPUT is
+specified so should typically be used at the beginning of the assembly.
 
 See also: <BANK>, <INCLUDE>, <ORG>, <SAVENEX>
 
