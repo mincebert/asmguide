@@ -3,7 +3,7 @@
 
 .asm inline assembler
 
-Contents
+.asm inline assembler guide
 
 .asm is an assembler which can assemble code embedded in a NextBASIC program, or
 from a source text file.

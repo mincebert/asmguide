@@ -9,7 +9,7 @@
 @toc MAIN
 @{r}.asm inline assembler
 
-@{c}@{h1}Contents
+@{c}@{h1}.asm inline assembler guide
 
 @{b}.asm@{ub} is an assembler which can assemble code embedded in a NextBASIC
 program, or from a source text file.
