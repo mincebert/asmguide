@@ -571,10 +571,13 @@ set to @{i}addr@{ui}.
 
 Write assembled code to a file:
 
- @{b}OUTPUT@{ub} "@{i}filename@{ui}"
+ @{b}OUTPUT@{ub} "@{i}file@{ui}"
 
-Directs the assembler to write the generated machine code directly to a file
-specified by @{i}filename@{ui}.
+Directs the assembler to write the generated machine code to @{i}file@{ui}
+instead of directly into memory.
+
+This operation only affects code assembled from the point where @{b}OUTPUT@{ub}
+is specified so should typically be used at the beginning of the assembly.
 
 See also: @{" BANK " LINK BANK},
 @{" INCLUDE " LINK INCLUDE}, @{" ORG " LINK ORG}, @{" SAVENEX " LINK SAVENEX}
