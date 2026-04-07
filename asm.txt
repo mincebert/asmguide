@@ -233,7 +233,7 @@ Values in an expression
 An expression can make use of various values in calculating an expression:
 
  * literal values
- * <labels> - corresponding to the address of the label)
+ * <labels> - corresponding to the address of the label
  * '$' - the current instruction address / program counter
  * '%var' - NextBASIC integer variable values
 
