@@ -653,10 +653,9 @@ operations to track relocations.
 RELOC_COUNT will return the number of relocations in tracked code in a tracked
 block.
 
-RELOC_TABLE will emit the relocation block.  The table is a raw dump of the high
-byte of every address that will need to be patched to relocate the code.  The
-format of this table is specifically designed to support the creation of
-NextZXOS drivers.
+RELOC_TABLE will emit the relocation block - a raw list of the high byte
+addresses that must be patched when relocating the code.  The format of this
+table is specifically designed to support the creation of NextZXOS drivers.
 
 More information about how these operations are used is available in the full
 documentation.
