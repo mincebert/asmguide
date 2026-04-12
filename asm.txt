@@ -42,12 +42,12 @@ example:
   10 SAVE "asmprint.bas" : REM Just in case things go wrong
   20 CLEAR $bfff : REM Move RAMTOP so we have some space for our code
   30 .asm : REM Assemble our code
-  40 ;    ld a, 2
-  50 ;    call $1601
+  40 ;    ld a, 2        ; 2 = screen
+  50 ;    call $1601     ; Open channel
   60 ;loop
-  70 ;    ld de, msg
-  80 ;    ld bc, eom-msg
-  90 ;    call $203c
+  70 ;    ld de, msg     ; Address of string
+  80 ;    ld bc, eom-msg ; Length of string
+  90 ;    call $203c     ; Print string
  100 ;    jr loop
  110 ;msg db "Hello World", 13
  120 ;eom equ $
