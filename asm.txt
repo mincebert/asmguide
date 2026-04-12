@@ -237,6 +237,8 @@ Anonymous labels are not limited to a block delimited by global labels, but only
 the previous or next label can be referenced, so are only suitable for skipping
 short blocks, or jumping back to the start of the current loop.
 
+See also: <Line format>
+
 ---[ EXPRESSIONS ]-------------------------------------------------------------
 
 .asm inline assembler
