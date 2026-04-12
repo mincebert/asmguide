@@ -15,7 +15,7 @@ Running .asm:
 
 Reference:
 
- <Program format>
+ <Line format>
  <Target locations>
  <Labels>
  <Expressions>
@@ -60,7 +60,7 @@ Lines of the assembly language program are marked with leading ';' (semicolon)
 characters and continue until the first line which does NOT begin with a ';' (up
 to and including line 120, above).  The semicolon character normally marks a
 comment in a NextBASIC program (the same as REM) so would otherwise be ignored.
-See <program format>.
+See <line format>.
 
 When used in this mode, the <LET> <pseudo operation> is useful to feed addresses
 from the assembled code back into the containing program.
@@ -83,7 +83,7 @@ argument:
 
 The file must be in plain text, consisting of just the assembly lanugage code
 (and any labels or pseudo operations), without BASIC line numbers.  Assembly
-will stop at the end of the file.  See <program format>.
+will stop at the end of the file.  See <line format>.
 
 .asm can be run manually from the command line (including immediate mode in
 NextBASIC - entering the command without a line number), or from within a
@@ -100,7 +100,7 @@ See also: <INCLUDE>, <OUTPUT>
 
 .asm inline assembler
 
-Program format
+Line format
 
 Lines of assembly embedded within NextBASIC programs using .asm have the form:
 
@@ -532,7 +532,7 @@ deep, with no strict limit on the number of files that can be included.
 
 The included files are stored as plain text, without line numbers, or leading
 semicolons but, otherwise, must be in a format supported by the assembler in a
-NextBASIC program.  See <program format>.
+NextBASIC program.  See <line format>.
 
 See also: <OUTPUT>, <Assembling code from a file>
 
@@ -733,6 +733,7 @@ Index
  <EQU>
  <Expressions>
  <File assembly>
+ <Format (line)>
  <IF ... ELSE ... ENDIF>
  <INCLUDE>
  <Inline assembly>
@@ -741,7 +742,6 @@ Index
  <NBRK>
  <ORG>
  <OUTPUT>
- <Program format>
  <Pseudo operations>
   RELOC_COUNT             <RELOC_x (relocation table)>
   RELOC_END               <RELOC_x (relocation table)>
