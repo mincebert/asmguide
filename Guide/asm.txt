@@ -104,30 +104,42 @@ Line format
 
 Lines of assembly embedded within NextBASIC programs using .asm have the form:
 
- line-number ;[[label[:]][ operation]][ ; comment]
+ line-number ;[[label[:]| ][instruction[:...]][;comment]]
 
 The ';' character is part of NextBASIC itself and indicates a comment (same as
 REM), so NextBASIC itself won't try and execute the line (see
 <inline assembly>).
 
-If a <label> is specified on a line, it must appear at the beginning, without
-any leading spaces between ';' and it.  It can optionally be followed by a
-trailing ':' (colon).
-
-Instructions or <pseudo operations> can appear after a label (with intervening
-space) or on a separate line.  If on a separate line, there must be one or more
-leading spaces, to indicate it is not a label.
-
-Comments can be inserted with a leading ';' - either on a line on their own, or
-after assembly code.  Note that, when on a line on their own in a NextBASIC
-program, two ';' characters are required: the first to indicate assembly code
-for .asm to process, and the second to mark a comment.
-
-Assembly instructions can be in lower or upper case.
-
 When assembly is read from a plain text file by running .asm with a
 <filename argument>, or using the <INCLUDE> pseudo operation, the line-number
 and ';' are omitted.
+
+If a <label> is specified on a line, it must appear at the beginning, without
+any leading spaces between ';' (or the beginning of the line, in the case of
+reading from a file) and it.  It can optionally be followed by a trailing ':'
+(colon) for preference of style.
+
+Instructions
+
+Z80 assembly language instructions, followed by their operands (if required) or
+<pseudo operations> can appear after a label (with intervening space), or on a
+separate line.  If on a separate line, there must be one or more leading spaces,
+to indicate it is not a label.
+
+Multiple instructions can be provided on a single line by separating each with a
+':' character.
+
+Assembly instructions can be in lower or upper case.
+
+Comments
+
+A comment can be inserted with a leading ';' - either on a line on its own, or
+after a label or instruction.  Note that, when code is included inline in a
+NextBASIC program, two ';' characters are required: the first to indicate
+assembly code for .asm to process, and the second to mark a comment.
+
+A comment lasts until the end of a line, so no further instructions can be
+specified, once a comment has been started.
 
 ---[ TARGET ]------------------------------------------------------------------
 
