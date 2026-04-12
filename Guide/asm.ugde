@@ -47,12 +47,12 @@ command, for example:
   10 SAVE "asmprint.bas" : REM Just in case things go wrong
   20 CLEAR $bfff : REM Move RAMTOP so we have some space for our code
   30 @{b}.asm@{ub} : REM Assemble our code
-  40 ;@{i}    ld a, 2@{ui}
-  50 ;@{i}    call $1601@{ui}
+  40 ;@{i}    ld a, 2        ; 2 = screen@{ui}
+  50 ;@{i}    call $1601     ; Open channel@{ui}
   60 ;@{i}loop@{ui}
-  70 ;@{i}    ld de, msg@{ui}
-  80 ;@{i}    ld bc, eom-msg@{ui}
-  90 ;@{i}    call $203c@{ui}
+  70 ;@{i}    ld de, msg     ; Address of string@{ui}
+  80 ;@{i}    ld bc, eom-msg ; Length of string@{ui}
+  90 ;@{i}    call $203c     ; Print string@{ui}
  100 ;@{i}    jr loop@{ui}
  110 ;@{i}msg db "Hello World", 13@{ui}
  120 ;@{i}eom equ $@{ui}
