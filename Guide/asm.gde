@@ -117,7 +117,7 @@ See also: @{" INCLUDE " LINK INCLUDE}, @{" OUTPUT " LINK OUTPUT}
 
 Lines of assembly embedded within NextBASIC programs using @{b}.asm@{ub} have the form:
 
- @{i}line-number@{ui} @{b};@{ub}[@{i}label@{ui}[@{b}:@{ub}]][ @{i}operation@{ui}]
+ @{i}line-number@{ui} @{b};@{ub}[[@{i}label@{ui}[@{b}:@{ub}]][ @{i}operation@{ui}]][ @{b};@{ub} @{i}comment@{ui}]
 
 The '@{b};@{ub}' character is part of NextBASIC itself and indicates a comment (same as
 @{b}REM@{ub}), so NextBASIC itself won't try and execute the line (see
@@ -130,6 +130,11 @@ trailing '@{b}:@{ub}' (colon).
 Instructions or @{" pseudo operations " LINK PSEUDO_OPS} can appear after a label (with intervening
 space) or on a separate line.  If on a separate line, there must be one or more
 leading spaces, to indicate it is not a label.
+
+Comments can be inserted with a leading '@{b};@{ub}' - either on a line on their own, or
+after assembly code.  Note that, when on a line on their own in a NextBASIC
+program, two '@{b};@{ub}' characters are required: the first to indicate assembly code
+for @{b}.asm@{ub} to process, and the second to mark a comment.
 
 Assembly instructions can be in lower or upper case.
 
