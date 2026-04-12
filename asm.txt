@@ -104,7 +104,7 @@ Line format
 
 Lines of assembly embedded within NextBASIC programs using .asm have the form:
 
- line-number ;[label[:]][ operation]
+ line-number ;[[label[:]][ operation]][ ; comment]
 
 The ';' character is part of NextBASIC itself and indicates a comment (same as
 REM), so NextBASIC itself won't try and execute the line (see
@@ -117,6 +117,11 @@ trailing ':' (colon).
 Instructions or <pseudo operations> can appear after a label (with intervening
 space) or on a separate line.  If on a separate line, there must be one or more
 leading spaces, to indicate it is not a label.
+
+Comments can be inserted with a leading ';' - either on a line on their own, or
+after assembly code.  Note that, when on a line on their own in a NextBASIC
+program, two ';' characters are required: the first to indicate assembly code
+for .asm to process, and the second to mark a comment.
 
 Assembly instructions can be in lower or upper case.
 
