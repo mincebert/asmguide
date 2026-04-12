@@ -112,32 +112,44 @@ See also: @{" INCLUDE " LINK INCLUDE}, @{" OUTPUT " LINK OUTPUT}
 Lines of assembly embedded within NextBASIC programs using @{b}.asm@{ub} have
 the form:
 
- @{i}line-number@{ui} @{b};@{ub}[[@{i}label@{ui}[@{b}:@{ub}]][ @{i}operation@{ui}]][ @{b};@{ub} @{i}comment@{ui}]
+ @{i}line-number@{ui} @{b};@{ub}[[@{i}label@{ui}[@{b}:@{ub}]| ][@{i}instruction@{ui}[:...]][@{b};@{ub}@{i}comment@{ui}]]
 
 The '@{b};@{ub}' character is part of NextBASIC itself and indicates a comment
 (same as @{b}REM@{ub}), so NextBASIC itself won't try and execute the line (see
 @{" inline assembly " LINK ASM_INLINE}).
 
-If a @{" label " LINK LABELS} is specified on a line, it must appear at the
-beginning, without any leading spaces between '@{b};@{ub}' and it.  It can
-optionally be followed by a trailing '@{b}:@{ub}' (colon).
-
-Instructions or @{" pseudo operations " LINK PSEUDO_OPS} can appear after a
-label (with intervening space) or on a separate line.  If on a separate line,
-there must be one or more leading spaces, to indicate it is not a label.
-
-Comments can be inserted with a leading '@{b};@{ub}' - either on a line on
-their own, or after assembly code.  Note that, when on a line on their own in a
-NextBASIC program, two '@{b};@{ub}' characters are required: the first to
-indicate assembly code for @{b}.asm@{ub} to process, and the second to mark a
-comment.
-
-Assembly instructions can be in lower or upper case.
-
 When assembly is read from a plain text file by running @{b}.asm@{ub} with a
 @{" filename argument " LINK ASM_FILE}, or using the
 @{" INCLUDE " LINK INCLUDE} pseudo operation, the @{i}line-number@{ui} and
 '@{b};@{ub}' are omitted.
+
+If a @{" label " LINK LABELS} is specified on a line, it must appear at the
+beginning, without any leading spaces between '@{b};@{ub}' (or the beginning of
+the line, in the case of reading from a file) and it.  It can optionally be
+followed by a trailing '@{b}:@{ub}' (colon) for preference of style.
+
+@{h2}Instructions
+
+Z80 assembly language @{i}instruction@{ui}s, followed by their operands (if
+required) or @{" pseudo operations " LINK PSEUDO_OPS} can appear after a label
+(with intervening space), or on a separate line.  If on a separate line, there
+must be one or more leading spaces, to indicate it is not a @{i}label@{ui}.
+
+Multiple @{i}instruction@{ui}s can be provided on a single line by separating
+each with a '@{b}:@{ub}' character.
+
+Assembly instructions can be in lower or upper case.
+
+@{h2}Comments
+
+A @{i}comment@{ui} can be inserted with a leading '@{b};@{ub}' - either on a
+line on its own, or after a @{i}label@{ui} or @{i}instruction@{ui}.  Note that,
+when code is included inline in a NextBASIC program, two '@{b};@{ub}'
+characters are required: the first to indicate assembly code for @{b}.asm@{ub}
+to process, and the second to mark a @{i}comment@{ui}.
+
+A @{i}comment@{ui} lasts until the end of a line, so no further
+@{i}instructions@{ui} can be specified, once a comment has been started.
 @----------------------------------------------------------------------------
 @node TARGET
 @{r}.asm inline assembler
